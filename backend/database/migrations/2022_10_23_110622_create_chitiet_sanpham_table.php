@@ -14,21 +14,21 @@ return new class extends Migration
     public function up()
     {
         Schema::create('chitiet_sanpham', function (Blueprint $table) {
-            $table->string('idsanpham');
-            $table->string('idthuonghieu');
-            $table->string('idmau');
-            $table->string('idloaimay');
-            $table->string('idchatlieu');
+            $table->string('idsanpham',10)->primary();
+            $table->string('idthuonghieu',10);
+            $table->string('idmau',10);
+            $table->string('idloaimay',10);
+            $table->string('idchatlieu',10);
             $table->boolean('gioitinh');
-            $table->string('xuatxu');
+            $table->string('xuatxu',100);
             $table->text('mota');
             $table->string('anh');
             $table->boolean('tinhtrang');
             $table->foreign('idsanpham')->references('idsanpham')->on('sanpham');
-            $table->foreign('idthuonghieu')->references('idkhuyenmai')->on('ctkm');
-            $table->foreign('idmau')->references('idkhuyenmai')->on('ctkm');
-            $table->foreign('idloaimay')->references('idkhuyenmai')->on('ctkm');
-            $table->foreign('idchatlieu')->references('idkhuyenmai')->on('ctkm');
+            $table->foreign('idthuonghieu')->references('idthuonghieu')->on('thuonghieu');
+            $table->foreign('idmau')->references('idmau')->on('mausac');
+            $table->foreign('idloaimay')->references('idloaimay')->on('loaimay');
+            $table->foreign('idchatlieu')->references('idchatlieu')->on('chatlieu');
             $table->timestamps();
         });
     }

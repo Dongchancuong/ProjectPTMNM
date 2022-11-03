@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('mausac', function (Blueprint $table) {
-            $table->string('idmau',10)->primary();
+            $table->string('idmau',10);
             $table->string('tenmau',100);
+            $table->primary('idmau');
             $table->timestamps();
         });
     }
