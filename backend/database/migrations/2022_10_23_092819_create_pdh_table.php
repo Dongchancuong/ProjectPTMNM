@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('pdh', function (Blueprint $table) {
-            $table->string('idphieudh',10)->primary();
+            $table->string('idphieudh',10);
             $table->string('idkhuyenmai',10);
             $table->string('hoten',100);
             $table->integer('sdt');
@@ -23,6 +23,7 @@ return new class extends Migration
             $table->double('tonggia');
             $table->date('ngaylap');
             $table->boolean('tinhtrang');
+            $table->primary('idphieudh');
             $table->foreign('idkhuyenmai')->references('idkhuyenmai')->on('ctkm');
             $table->timestamps();
         });

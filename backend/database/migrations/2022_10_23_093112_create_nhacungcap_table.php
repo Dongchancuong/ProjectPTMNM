@@ -14,10 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('nhacungcap', function (Blueprint $table) {            
-            $table->string('idnhacungcap',10)->primary();
+            $table->string('idnhacungcap',10);
             $table->string('tennhacungcap',100);
             $table->text('diachi');
             $table->integer('sdt');
+            $table->primary('idnhacungcap');
             $table->timestamps();
         });
     }

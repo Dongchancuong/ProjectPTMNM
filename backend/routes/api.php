@@ -1,5 +1,7 @@
 <?php
 
+
+use App\Http\Resources\Promotion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+<<<<<<< HEAD
 //Check đăng nhập/đăng xuất cho từng tài khoản
 use App\Http\Controllers\AuthController;
 Route::post('login', [AuthController::class, 'login']);
@@ -60,3 +63,11 @@ Route::resource('ct_cv', PositionDetailController::class);
 
 
 
+=======
+//Route chương trình khuyến mãi 
+use App\Http\Controllers\PromotionController;
+Route::get('promtion', [PromotionController::class,'index']);
+Route::post('promtion', [PromotionController::class,'store']);
+
+//Route phiếu đặt hàng
+>>>>>>> origin/feature_be_v.2.0

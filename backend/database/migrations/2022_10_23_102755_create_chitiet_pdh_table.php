@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('soluong');
             $table->double('dongia');
             $table->foreign('idsanpham')->references('idsanpham')->on('sanpham');
+            $table->foreign('idphieudh')->references('idphieudh')->on('pdh');
             $table->timestamps();
         });
     }

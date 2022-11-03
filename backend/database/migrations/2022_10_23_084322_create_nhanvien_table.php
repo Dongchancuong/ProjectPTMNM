@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('nhanvien', function (Blueprint $table) {
-            $table->string('idnhanvien',10)->primary('idnhanvien');
+            $table->string('idnhanvien',10);
             $table->string('idtaikhoan',10);
             $table->string('hoten',10);
             $table->string('gioitinh',10);
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('email',10);
             $table->date('ngayvaolam',10);
             $table->double('luong');    
+            $table->primary('idnhanvien');
             $table->foreign('idtaikhoan')->references('idtaikhoan')->on('taikhoan');
             $table->timestamps();
         });

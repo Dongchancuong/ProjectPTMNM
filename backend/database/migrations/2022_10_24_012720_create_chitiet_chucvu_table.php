@@ -14,9 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('chitiet_chucvu', function (Blueprint $table) {
-            $table->string('idchucvu',10)->primary();
+            $table->string('idchucvu',10);
             $table->string('idchucnang',10);
+            $table->primary(['idchucvu','idchucnang']);
             $table->foreign('idchucnang')->references('idchucnang')->on('chucnang');
+            $table->foreign('idchucvu')->references('idchucvu')->on('chucvu');
             $table->timestamps();
         });
     }
