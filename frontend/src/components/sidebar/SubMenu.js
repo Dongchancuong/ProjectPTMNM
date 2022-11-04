@@ -1,17 +1,20 @@
-import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import '../../styles/NavBar.scss';
 
+//cai khung sub menu
 const SidebarLink = styled(Link)`
     display: flex;
     color: #e1e9fc;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
+    padding-right: 5px;
     list-style: none;
-    height: 60px;
+    height: 55px;
     text-decoration: none;
-    font-size: 30px;
+    font-size: 20px;
     &:hover {
         background: #252831;
         border-left: 4px solid #632ce4;
@@ -19,15 +22,32 @@ const SidebarLink = styled(Link)`
     }
 `;
 
-const SidebarLabel = styled.span`
-    margin-left: 16px;
-    font-size: 17px;
+//
+const SubIcon = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 25px;
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    background: rgba(108,114,147,.2);
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    margin-right: 20px;
 `;
 
+const SidebarLabel = styled.span`
+    font-weight: 600;
+    font-size: 15px;
+    width: 67%;
+`;
+
+//https://cssgradient.io/
 const DropdownLink = styled(Link)`
-    background: #414757;
-    height: 60px;
-    padding-left: ${({ sidebar }) => (sidebar ? '3rem' : '20px')};
+    background: #223047;
+    height: 50px;
+    padding-left: 40px;
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -41,7 +61,7 @@ const DropdownLink = styled(Link)`
     }
 `
 
-const SubMenu = ({ item, sidebar }) => {
+const SubMenu = ({ item }) => {
     const [subnav, setSubnav] = useState(false)
 
     const showSubnav = () => setSubnav(!subnav)
@@ -49,22 +69,27 @@ const SubMenu = ({ item, sidebar }) => {
     return (
         <>
             <SidebarLink to={item.path} onClick={item.subNav && showSubnav}>
-                <div>
+                <SubIcon style={{ color: item.color }}>
                     {item.icon}
-                    <SidebarLabel>{sidebar ? item.title : !sidebar}</SidebarLabel>
-                </div>
+                </SubIcon>
+                {/* <SidebarLabel>{sidebar ? item.title : !sidebar}</SidebarLabel> */}
+                <SidebarLabel>{item.title}</SidebarLabel>
                 <div>
-                    {sidebar ? (item.subNav && subnav ? item.iconOpened : item.subNav ? item.iconClosed : null) : !sidebar}
+                    {/* {sidebar ? (item.subNav && subnav ? item.iconOpened : item.subNav ? item.iconClosed : null) : !sidebar} */}
+                    {item.subNav && subnav ? item.iconOpened : item.subNav ? item.iconClosed : null}
                 </div>
             </SidebarLink>
             {subnav && item.subNav.map((item, index) => {
                 return (
                     <DropdownLink to={item.path} key={index}>
-                        {item.icon}
-                        <SidebarLabel>{sidebar ? item.title : !sidebar}</SidebarLabel>
+                        <SubIcon style={{ color: item.color }}>
+                            {item.icon}
+                        </SubIcon>
+                        <SidebarLabel>{item.title}</SidebarLabel>
                     </DropdownLink>
                 )
             })}
+
         </>
     );
 };

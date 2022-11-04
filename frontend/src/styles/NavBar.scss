@@ -1,0 +1,40 @@
+.Nav-Bar-Admin {
+    background: #15171c;
+    height: 60px;
+    width: calc(100% - 285px);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 285px;
+    z-index: 1;
+}
+
+.Nav-Bar-Title {
+    color: white;
+    margin-left: 50px;
+}
+
+img, svg {
+    vertical-align: baseline;
+}
+
+.Nav-Bar {
+    margin: auto;
+    margin-right: 0;
+}
+
+.Sub-Icon{
+    display: inline-block;
+    flex-wrap: wrap;
+    font-size: 15px;
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    background: rgba(108,114,147,.2);
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    margin-right: 10px;
+}
