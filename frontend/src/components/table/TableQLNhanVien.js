@@ -6,12 +6,31 @@ import filterFactory, { numberFilter, textFilter, dateFilter, selectFilter } fro
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import '../../styles/Table.scss';
-import Moment from 'moment';
+import Moment from 'moment';//format tiền VNĐ
+import Button from "react-bootstrap/esm/Button";
 
 function gioitinhFormatter(cell, row, rowIndex, formatExtraData) {// Hiển thị Nam hoặc Nữ ở object giới tính
     return (
         <>{formatExtraData[cell]}</>
     );
+}
+
+function xemThongTinChiTiet(index) {
+    console.log('Gia tri rowIndex: ', index)
+    return (
+        <>
+        </>
+    );
+}
+
+function handleEventButton(cell, row, rowIndex) {
+    return (
+        <>
+            <Button variant="secondary" onClick={() => xemThongTinChiTiet(row)}>Xem</Button>
+            <Button variant="primary">Sửa</Button>
+            <Button variant="danger">Xóa</Button>
+        </>
+    )
 }
 
 const columns = [//Title của table
@@ -21,14 +40,6 @@ const columns = [//Title của table
         sort: true,
         filter: textFilter({
             placeholder: 'Tìm ID Nhân Viên'
-        })
-    },
-    {
-        dataField: 'idtaikhoan',
-        text: 'ID Tài Khoản',
-        sort: true,
-        filter: textFilter({
-            placeholder: 'Tìm ID Tài Khoản'
         })
     },
     {
@@ -56,17 +67,17 @@ const columns = [//Title của table
             }
         })
     },
-    {
-        dataField: 'ngaysinh',
-        text: 'Ngày sinh',
-        sort: true,
-        filter: dateFilter(),
-        formatter: (cell, row) => {
-            return (
-                <>{Moment(row.ngaysinh).format('DD-MM-YYYY')}</>
-            )
-        }
-    },
+    // {
+    //     dataField: 'ngaysinh',
+    //     text: 'Ngày sinh',
+    //     sort: true,
+    //     filter: dateFilter(),
+    //     formatter: (cell, row) => {
+    //         return (
+    //             <>{Moment(row.ngaysinh).format('DD-MM-YYYY')}</>
+    //         )
+    //     }
+    // },
     {
         dataField: 'sdt',
         text: 'Số điện thoại',
@@ -74,38 +85,35 @@ const columns = [//Title của table
         filter: numberFilter()
     },
     {
-        dataField: 'diachi',
-        text: 'Địa chỉ',
-        sort: true,
-        filter: textFilter()
-    },
-    {
         dataField: 'email',
         text: 'Email',
         sort: true,
         filter: textFilter()
     },
+    // {
+    //     dataField: 'ngayvaolam',
+    //     text: 'Ngày vào làm',
+    //     sort: true,
+    //     filter: dateFilter(),
+    //     formatter: (cell, row) => {
+    //         return (
+    //             <>{Moment(row.ngayvaolam).format('DD-MM-YYYY')}</>
+    //         )
+    //     }
+    // },
+    // {
+    //     dataField: 'luong',
+    //     text: 'Lương',
+    //     sort: true,
+    //     filter: numberFilter(),
+    //     formatter: (cell, row) => {
+    //         return (
+    //             <>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND'}).format(row.luong)}</>
+    //         )
+    //     }
+    // }
     {
-        dataField: 'ngayvaolam',
-        text: 'Ngày vào làm',
-        sort: true,
-        filter: dateFilter(),
-        formatter: (cell, row) => {
-            return (
-                <>{Moment(row.ngayvaolam).format('DD-MM-YYYY')}</>
-            )
-        }
-    },
-    {
-        dataField: 'luong',
-        text: 'Lương',
-        sort: true,
-        filter: numberFilter(),
-        formatter: (cell, row) => {
-            return (
-                <>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND'}).format(row.luong)}</>
-            )
-        }
+        formatter: handleEventButton
     }
 ];
 
@@ -113,12 +121,6 @@ const defaultSorted = [{
     dataField: 'name',
     order: 'desc'//thứ tự từ cao đến thấp
 }];
-
-const selectRow = {//chọn dòng sẽ tô màu
-    mode: 'checkbox',
-    clickToSelect: true,
-    style: { backgroundColor: '#c8e6c9' }
-};
 
 class TableQLNhanVien extends React.Component {
     state = {
@@ -145,7 +147,6 @@ class TableQLNhanVien extends React.Component {
                     data={this.state.list}//dữ liệu
                     columns={columns}//tiêu đề
                     pagination={paginationFactory({ sizePerPage: 10 })}//phân trang
-                    selectRow={selectRow}//bấm để chọn
                     defaultSorted={defaultSorted}
                     filter={filterFactory()}
                 />

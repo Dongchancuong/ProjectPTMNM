@@ -20,7 +20,7 @@ import { useState } from 'react';
 
 function App() {
   const [dangnhap, setDangnhap] = useState(false)
-
+  const title = "monkey"
   if (!dangnhap) {
     return (
       <Router>
@@ -35,24 +35,23 @@ function App() {
     return (
       <Router>
         <SideBar />
-        <NavBarAdmin />
         <div className='content-container'>
           <Routes>
-            <Route exact path='/' element={<Dashboard />} />
-            <Route exact path='/qlchucvu' element={<QLChucVu />} />
-            <Route exact path='/qlsanpham' element={<QLSanPham />} />
-            <Route exact path='/qlsanpham/qlloaimay' element={<QLLoaiMay />} />
-            <Route exact path='/qlsanpham/qlmausac' element={<QLMauSac />} />
-            <Route exact path='/qlsanpham/qlchatlieu' element={<QLChatLieu />} />
-            <Route exact path='/qlsanpham/qlthuonghieu' element={<QLThuongHieu />} />
-            <Route exact path='/qltaikhoan' element={<QLTaiKhoan />} />
-            <Route exact path='/qlnhanvien' element={<QLNhanVien />} />
-            <Route exact path='/qlkhachhang' element={<QLKhachHang />} />
-            <Route exact path='/qlhoadon' element={<QLHoaDon />} />
-            <Route exact path='/qlphieudathang' element={<QLPhieuDatHang />} />
-            <Route exact path='/qlphieunhaphang' element={<QLPhieuNhapHang />} />
-            <Route exact path='/qlchuongtrinhkhuyenmai' element={<QLCTKhuyenMai />} />
-            <Route exact path='/qlnhacungcap' element={<QLNhaCungCap />} />
+            <Route exact path='/' element={<Dashboard title={"Dashboard"} />} />
+            <Route exact path='/qlchucvu' element={<QLChucVu title={"Quản lý chức vụ"} />} />
+            <Route exact path='/qlsanpham' element={<QLSanPham title={"Quản lý sản phẩm"} />} />
+            <Route exact path='/qlsanpham/qlloaimay' element={<QLLoaiMay title={"Quản lý loại máy"} />} />
+            <Route exact path='/qlsanpham/qlmausac' element={<QLMauSac title={"Quản lý màu sắc"} />} />
+            <Route exact path='/qlsanpham/qlchatlieu' element={<QLChatLieu title={"Quản lý chất lượng"} />} />
+            <Route exact path='/qlsanpham/qlthuonghieu' element={<QLThuongHieu title={"Quản lý thương hiệu"} />} />
+            <Route exact path='/qltaikhoan' element={<QLTaiKhoan title={"Quản lý tài khoản"} />} />
+            <Route exact path='/qlnhanvien' element={<QLNhanVien title={"Quản lý nhân viên"} />} />
+            <Route exact path='/qlkhachhang' element={<QLKhachHang title={"Quản lý khách hàng"} />} />
+            <Route exact path='/qlhoadon' element={<QLHoaDon title={"Quản lý hóa đơn"} />} />
+            <Route exact path='/qlphieudathang' element={<QLPhieuDatHang title={"Quản lý phiếu đặt hàng"} />} />
+            <Route exact path='/qlphieunhaphang' element={<QLPhieuNhapHang title={"Quản lý phiếu nhập hàng"} />} />
+            <Route exact path='/qlchuongtrinhkhuyenmai' element={<QLCTKhuyenMai title={"Quản lý chương trình khuyến mãi"} />} />
+            <Route exact path='/qlnhacungcap' element={<QLNhaCungCap title={"Quản lý nhà cung cấp"} />} />
             <Route exact path='/AuthCustomer' element={<AuthCustomer />} />
           </Routes>
         </div >

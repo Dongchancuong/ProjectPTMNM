@@ -5,10 +5,10 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import * as MdIcons from 'react-icons/md';
 
 
-const NavBar = () => {
+const NavBar = ({ title }) => {
     return (
         <div className="Nav-Bar-Admin">
-            <span className='Nav-Bar-Title'>Tiêu đề trang</span>
+            <span className='Nav-Bar-Title'>{title}</span>
             <Navbar className='Nav-Bar' variant="dark" expand="lg">
                 <Nav className='Nav-Bar'>
                     <NavDropdown
