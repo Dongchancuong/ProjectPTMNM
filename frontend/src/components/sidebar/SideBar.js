@@ -44,7 +44,7 @@ const SidebarWrap = styled.nav`
 const SideBar = () => {
     const [sidebar, setSidebar] = useState(true)
 
-    const showSidebar = () => setSidebar(!sidebar)
+    // const showSidebar = () => setSidebar(!sidebar)
 
     return (
         <>
@@ -52,7 +52,7 @@ const SideBar = () => {
             <SidebarNav sidebar={sidebar}>
                 <SidebarWrap>
                     <NavIcon to='#'>
-                        {sidebar ? <AiIcons.AiOutlineClose onClick={showSidebar} /> : <FaIcons.FaBars onClick={showSidebar} />}
+                        {/* {sidebar ? <AiIcons.AiOutlineClose onClick={showSidebar} /> : <FaIcons.FaBars onClick={showSidebar} />} */}
                     </NavIcon>
                     <Line />
                     {SideBarData.map((item, index) => {
