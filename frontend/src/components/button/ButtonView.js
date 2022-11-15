@@ -10,8 +10,6 @@ const ButtonView = ({ value }) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    console.log("Value bên button View: ", value)
-
     return (
         <>
             <Button variant="secondary" onClick={handleShow}>
@@ -29,8 +27,8 @@ const ButtonView = ({ value }) => {
                             <Form.Control
                                 type="text"
                                 placeholder=""
-                                value={value.idnhanvien}
-                                autoFocus
+                                defaultValue={value.idnhanvien}
+                                readOnly
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -38,7 +36,8 @@ const ButtonView = ({ value }) => {
                             <Form.Control
                                 type="text"
                                 placeholder=""
-                                value={value.idtaikhoan}
+                                defaultValue={value.idtaikhoan}
+                                readOnly
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -46,7 +45,8 @@ const ButtonView = ({ value }) => {
                             <Form.Control
                                 type="text"
                                 placeholder=""
-                                value={value.hoten}
+                                defaultValue={value.hoten}
+                                readOnly
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -54,7 +54,8 @@ const ButtonView = ({ value }) => {
                             <Form.Control
                                 type="text"
                                 placeholder=""
-                                value={value.gioitinh === 1 ? "Nam" : "Nữ"}
+                                defaultValue={value.gioitinh === 1 ? "Nam" : "Nữ"}
+                                readOnly
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -62,7 +63,8 @@ const ButtonView = ({ value }) => {
                             <Form.Control
                                 type="text"
                                 placeholder=""
-                                value={Moment(value.ngaysinh).format('DD-MM-YYYY')}
+                                defaultValue={Moment(value.ngaysinh).format('DD-MM-YYYY')}
+                                readOnly
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -70,15 +72,17 @@ const ButtonView = ({ value }) => {
                             <Form.Control
                                 type="text"
                                 placeholder=""
-                                value={value.sdt}
+                                defaultValue={value.sdt}
+                                readOnly
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Địa chỉ</Form.Label>
                             <Form.Control
-                                type="textarea"
+                                as="textarea"
                                 rows={2}
-                                value={value.diachi}
+                                defaultValue={value.diachi}
+                                readOnly
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -86,15 +90,17 @@ const ButtonView = ({ value }) => {
                             <Form.Control
                                 type="email"
                                 placeholder=""
-                                value={value.email}
+                                defaultValue={value.email}
+                                readOnly
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Ngày vào làm</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder=""
-                                value={Moment(value.ngayvaolam).format('DD-MM-YYYY')}
+                                placeholder=""  
+                                defaultValue={Moment(value.ngayvaolam).format('DD-MM-YYYY')}
+                                readOnly
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -102,7 +108,8 @@ const ButtonView = ({ value }) => {
                             <Form.Control
                                 type="text"
                                 placeholder=""
-                                value={ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value.luong) }
+                                defaultValue={ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value.luong) }
+                                readOnly
                             />
                         </Form.Group>
                     </Form>
@@ -110,9 +117,6 @@ const ButtonView = ({ value }) => {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Đóng
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Lưu
                     </Button>
                 </Modal.Footer>
             </Modal>

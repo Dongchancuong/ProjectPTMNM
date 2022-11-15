@@ -7,7 +7,9 @@ import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.m
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import '../../styles/Table.scss';
 import Button from "react-bootstrap/esm/Button";
+import ButtonCreate from "../button/ButtonCreate";
 import ButtonView from "../button/ButtonView";
+import ButtonEdit from "../button/ButtonEdit"
 import ButtonDelete from "../button/ButtonDelete";
 
 class TableQLNhanVien extends React.Component {
@@ -28,8 +30,8 @@ class TableQLNhanVien extends React.Component {
         return (
             <>
                 <ButtonView value={this.state.list[rowIndex]} />
-                <Button variant="primary">Sửa</Button>
-                <ButtonDelete />
+                <ButtonEdit value={this.state.list[rowIndex]} />
+                <ButtonDelete value={row} />
             </>
         )
     }
@@ -151,6 +153,7 @@ class TableQLNhanVien extends React.Component {
     render() {
         return (
             <div className="bg-white">
+                {/* <ButtonCreate value={this.list.data} /> */}
                 <BootstrapTable
                     striped
                     hover
