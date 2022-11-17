@@ -16,7 +16,8 @@ class Order extends Model
         'email',
         'diachi',
         'tonggia',
-        'ngaylap',
         'tinhtrang',
+        'created_at',
+        'updated_at'
     ];
 }

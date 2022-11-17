@@ -22,11 +22,6 @@ class BillController extends Controller
         return response()->json($arr, 200);
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         $input = $request->all(); 
@@ -57,16 +52,6 @@ class BillController extends Controller
            'data'=> new BillResource($bill)
         ];
         return response()->json($arr, 201);
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
     }
 
     public function update(Request $request, Bill $bill)

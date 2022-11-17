@@ -14,11 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('sanpham', function (Blueprint $table) {
-            $table->string('idsanpham',10)->primary();
-            $table->string('idkhuyenmai',10);
+            $table->string('idsanpham',30);
+            $table->string('idkhuyenmai',10)->nullable();
             $table->string('idnhacungcap',10);
             $table->string('tensanpham',100);
-            $table->double('dongia');
+            $table->integer('soluong'); 
+            $table->integer('dongia');
+            $table->tinyInteger('visible')->default(1);
+            $table->primary('idsanpham');
             $table->foreign('idkhuyenmai')->references('idkhuyenmai')->on('ctkm');
             $table->foreign('idnhacungcap')->references('idnhacungcap')->on('nhacungcap');
             $table->timestamps();

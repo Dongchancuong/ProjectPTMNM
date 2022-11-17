@@ -15,11 +15,15 @@ return new class extends Migration
     {
         //Tạo bảng phiếu đặt hàng
         Schema::create('ctkm', function (Blueprint $table) {
-            $table->string('idkhuyenmai',10)->primary();
+            $table->string('idkhuyenmai',20);
+            $table->string('tenchuongtrinh',40);
             $table->integer('giamgia');
             $table->text('mota');
             $table->date('ngaybatdau');
             $table->date('ngayketthuc');
+            $table->tinyInteger('on_off')->default(0);
+            $table->tinyInteger('visible')->default(1);
+            $table->primary('idkhuyenmai');
             $table->timestamps();
         });
     }

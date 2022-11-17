@@ -11,6 +11,12 @@ class Position extends Model
     protected $table = 'chucvu';
     protected $fillable = [
         'idchucvu',
-        'tenchucvu'
+        'tenchucvu',
+        'visible',
+        'created_at',
+        'updated_at'
     ];
+    protected $primaryKey = 'idchucvu';
+    public $incrementing = false;
+
 }

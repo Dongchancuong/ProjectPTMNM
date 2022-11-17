@@ -22,11 +22,6 @@ class CustomerController extends Controller
         return response()->json($arr, 200);
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         $input = $request->all(); 
@@ -52,16 +47,6 @@ class CustomerController extends Controller
            'data'=> new CustomerResource($customer)
         ];
         return response()->json($arr, 201);
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
     }
 
     public function update(Request $request, Customer $customer)

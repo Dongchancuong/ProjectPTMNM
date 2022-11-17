@@ -14,10 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('nhacungcap', function (Blueprint $table) {            
-            $table->string('idnhacungcap',10)->primary();
+            $table->string('idnhacungcap',20);
             $table->string('tennhacungcap',100);
             $table->text('diachi');
-            $table->integer('sdt');
+            $table->string('email',30);
+            $table->string('sdt',12);
+            $table->tinyInteger('visible')->default(1);
+            $table->primary('idnhacungcap');
             $table->timestamps();
         });
     }

@@ -14,16 +14,24 @@ return new class extends Migration
     public function up()
     {
         Schema::create('nhanvien', function (Blueprint $table) {
-            $table->string('idnhanvien',10)->primary('idnhanvien');
-            $table->string('idtaikhoan',10);
-            $table->string('hoten',10);
+            $table->increments('STT')->start_from(0);
+            $table->string('idnhanvien',10);
+            $table->string('idtaikhoan',10)->nullable();
+            $table->string('hoten',50);
             $table->string('gioitinh',10);
-            $table->string('ngaysinh',10);
-            $table->integer('sdt');
+            $table->date('ngaysinh',10);
+            $table->string('sdt',12);
             $table->text('diachi',10);
-            $table->string('email',10);
+            $table->string('email',40);
             $table->date('ngayvaolam',10);
-            $table->double('luong');    
+            $table->double('luong');  
+            $table->tinyInteger('visible')->default(1);  
+            /* create an index for the autoincrement column */
+            $table->unique('STT');  
+            /* drop the primary key */
+            $table->dropPrimary(); 
+            /* add new primary key */
+            $table->primary(['idnhanvien', 'STT']);
             $table->foreign('idtaikhoan')->references('idtaikhoan')->on('taikhoan');
             $table->timestamps();
         });

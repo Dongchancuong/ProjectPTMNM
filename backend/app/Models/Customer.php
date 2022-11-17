@@ -10,11 +10,14 @@ class Customer extends Model
     use HasFactory;
     protected $table = 'khachhang';
     protected $fillable = [
+        'idkhachhang',
         'hoten',
         'sdt',
         'diachi',
         'email',
-        'doanhso',
-        'capdo'
+        'tichluy',
+        'capdo',
+        'created_at',
+        'updated_at'
     ];
 }

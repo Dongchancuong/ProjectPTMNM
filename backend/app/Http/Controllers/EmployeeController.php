@@ -22,11 +22,6 @@ class EmployeeController extends Controller
         return response()->json($arr, 200);
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         $input = $request->all(); 
@@ -61,22 +56,10 @@ class EmployeeController extends Controller
         return response()->json($arr, 201);
     }
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
     public function update(Request $request, Employee $employee)
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-          'idnhanvien' => 'required',
-          'idtaikhoan' => 'nullable',
           'hoten' => 'required', 
           'gioitinh' => 'required',
           'ngaysinh' => 'required',

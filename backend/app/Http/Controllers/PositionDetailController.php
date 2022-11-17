@@ -7,57 +7,32 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\PositionDetail;
 use App\Http\Resources\PositionDetail as PositionDetailResource;
+use Illuminate\Support\Facades\DB;
 
 
 class PositionDetailController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $positiondetails = PositionDetail::all();
+        $positiondetails = PositionDetail::where('idchucvu', '=', $request['idchucvu'])->where('visible', '=', 1)->get();
         $arr = [
         'status' => true,
-        'message' => "Chi tiết chức vụ",
+        'message' => "",
         'data'=>PositionDetailResource::collection($positiondetails)
         ];
         return response()->json($arr, 200);
     }
 
-    public function create()
+    //xem chi tiet
+    public function detail()
     {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        $input = $request->all(); 
-        $validator = Validator::make($input, [
-            'idchucvu' => 'required',
-            'idchucnang' => 'required'
-        ]);
-        if($validator->fails()){
-           $arr = [
-             'success' => false,
-             'message' => 'Lỗi kiểm tra dữ liệu',
-             'data' => $validator->errors()
-           ];
-           return response()->json($arr, 200);
-        }
-        $positiondetail = PositionDetail::create($input);
-        $arr = ['status' => true,
-           'message'=>"Thêm chức năng cho chức vụ thành công",
-           'data'=> new PositionDetailResource($positiondetail)
+        $details = PositionDetail::all();
+        $arr = [
+        'status' => true,
+        'message' => "",
+        'data'=>PositionDetailResource::collection($details)
         ];
-        return response()->json($arr, 201);
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
+        return response()->json($arr, 200);
     }
 
     public function update(Request $request, PositionDetail $positiondetail)
@@ -65,7 +40,8 @@ class PositionDetailController extends Controller
         $input = $request->all();
         $validator = Validator::make($input, [
             'idchucvu' => 'required',
-            'idchucnang' => 'required'
+            'idchucnang' => 'required',
+            'updated_at' => 'required'
         ]);
         if($validator->fails()){
            $arr = [
@@ -76,23 +52,12 @@ class PositionDetailController extends Controller
            return response()->json($arr, 200);
         }
         $positiondetail->idchucvu = $input['idchucvu'];
-        $positiondetail->idchucnang = $input['idchucnang'];
+        $positiondetail->tenchucvu = $input['tenchucvu'];
         $positiondetail->save();
         $arr = [
            'status' => true,
-           'message' => 'Cập nhật thành công',
+           'message' => 'Cập nhật chức vụ thành công',
            'data' => new PositionDetailResource($positiondetail)
-        ];
-        return response()->json($arr, 200);
-    }
-
-    public function destroy(PositionDetail $positiondetail)
-    {
-        $positiondetail->delete();
-        $arr = [
-            'status' => true,
-            'message' =>'Dữ liệu đã được xóa',
-            'data' => [],
         ];
         return response()->json($arr, 200);
     }

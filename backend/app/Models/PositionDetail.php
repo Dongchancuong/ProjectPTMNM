@@ -9,8 +9,6 @@ class PositionDetail extends Model
 {
     use HasFactory;
     protected $table = 'chitiet_chucvu';
-    protected $fillable = [
-        'idchucvu',
-        'idchucnang'
-    ];
+    protected $primaryKey = ['idchucvu', 'idchucnang'];
+    public $incrementing = false;
 }

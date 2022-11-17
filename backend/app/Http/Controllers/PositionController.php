@@ -11,7 +11,7 @@ use App\Http\Resources\Position as PositionResource;
 
 class PositionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $positions = Position::all();
         $arr = [
@@ -22,17 +22,14 @@ class PositionController extends Controller
         return response()->json($arr, 200);
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         $input = $request->all(); 
         $validator = Validator::make($input, [
             'idchucvu' => 'required',
-            'tenchucvu' => 'required'
+            'tenchucvu' => 'required',
+            'updated_at' => date("Y-m-d H:i:s"),
+            'created_at' => date("Y-m-d H:i:s"),
         ]);
         if($validator->fails()){
            $arr = [
@@ -42,22 +39,28 @@ class PositionController extends Controller
            ];
            return response()->json($arr, 200);
         }
-        $position = Position::create($input);
-        $arr = ['status' => true,
-           'message'=>"Thêm chức vụ thành công",
-           'data'=> new PositionResource($position)
-        ];
-        return response()->json($arr, 201);
-    }
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
+        $position = new PositionResource;
+        $position->idchucvu = $input['idchucvu'];
+        $position->tenchucvu = $input['tenchucvu'];
+        $position->created_at = $input['created_at'];
+        $position->updated_at = $input['updated_at'];
+        $query = Position::insert([
+            ['idchucvu' => $position->idchucvu, 'tenchucvu' => $position->tenchucvu, 'created_at' => $position->created_at, 'updated_at' => $position->updated_at]
+        ]);
+        
+        if ($query->fail()){
+            $arr = ['status' => false,
+            'message'=>"Truy vấn thất bại",
+            ];
+        return response()->json($arr, 200);
+        }
+        else {
+            $arr = ['status' => true,
+            'message'=>"Thêm chức vụ thành công",
+            'data'=> new PositionResource($position),
+            ];
+        return response()->json($arr, 201);}
     }
 
     public function update(Request $request, Position $position)
@@ -65,7 +68,8 @@ class PositionController extends Controller
         $input = $request->all();
         $validator = Validator::make($input, [
             'idchucvu' => 'required',
-            'tenchucvu' => 'required'
+            'tenchucvu' => 'required',
+            'updated_at' => 'required'
         ]);
         if($validator->fails()){
            $arr = [
@@ -86,13 +90,12 @@ class PositionController extends Controller
         return response()->json($arr, 200);
     }
 
-    public function destroy(Position $position)
+    public function destroy(Request $request)
     {
-        $position->delete();
         $arr = [
             'status' => true,
             'message' =>'Chức vụ đã được xóa',
-            'data' => [],
+            'data' => Position::where('idchucvu', '=', $request['idchucvu'])->update(['visible' => 0]),
         ];
         return response()->json($arr, 200);
     }

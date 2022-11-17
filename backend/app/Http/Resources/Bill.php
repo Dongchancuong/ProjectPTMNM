@@ -12,7 +12,6 @@ class Bill extends JsonResource
             'idhoadon' => $this->idhoadon,
             'idkhachhang' => $this->idkhachhang,
             'idkhuyenmai' => $this->idkhuyenmai,
-            'idohieudh' => $this->idphieudh,
             'idnhanvien' => $this->idnhanvien,
             'hoten' => $this->hoten,
             'diachi' => $this->diachi,
@@ -20,9 +19,8 @@ class Bill extends JsonResource
             'email' => $this->email,
             'tonggia' => $this->tonggia,
             'soluong' => $this->soluong,
-            'ngaylap' => $this->ngaylap,
-            'created_at' => $this->created_at->format('d/m/Y'),
-            'updated_at' => $this->updated_at->format('d/m/Y'),
+            'created_at' => $this->created_at !== null ? $this->created_at->format('d/m/Y') : null,
+            'updated_at' => $this->updated_at !== null ? $this->updated_at->format('d/m/Y') : null,
         ];
     }
 }

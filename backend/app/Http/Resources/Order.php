@@ -16,10 +16,9 @@ class Order extends JsonResource
             'email' => $this->email,
             'diachi' => $this->diachi,
             'tonggia' => $this->tonggia,
-            'ngaylap' => $this->ngaylap,
             'tinhtrang' => $this->tinhtrang,
-            'created_at' => $this->created_at->format('d/m/Y'),
-            'updated_at' => $this->updated_at->format('d/m/Y'),
+            'created_at' => $this->created_at !== null ? $this->created_at->format('d/m/Y') : null,
+            'updated_at' => $this->updated_at !== null ? $this->updated_at->format('d/m/Y') : null,
         ];
     }
 }

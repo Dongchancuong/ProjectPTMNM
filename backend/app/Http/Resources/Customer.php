@@ -14,10 +14,10 @@ class Customer extends JsonResource
             'sdt' => $this->sdt,
             'diachi' => $this->diachi,
             'email' => $this->email,
-            'doanhso' => $this->doanhso,
+            'tichluy' => $this->tichluy,
             'capdo' => $this->capdo,
-            'created_at' => $this->created_at->format('d/m/Y'),
-            'updated_at' => $this->updated_at->format('d/m/Y'),
+            'created_at' => $this->created_at !== null ? $this->created_at->format('d/m/Y') : null,
+            'updated_at' => $this->updated_at !== null ? $this->updated_at->format('d/m/Y') : null,
         ];
     }
 }

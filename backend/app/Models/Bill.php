@@ -10,6 +10,8 @@ class Bill extends Model
     use HasFactory;
     protected $table = 'hoadon';
     protected $fillable = [
+        'idhoadon',
+        'idkhachhang',
         'idkhuyenmai',
         'idnhanvien',
         'hoten',
@@ -18,6 +20,7 @@ class Bill extends Model
         'email',
         'tonggia',
         'soluong',
-        'ngaylap',
+        'created_at',
+        'updated_at'
     ];
 }
