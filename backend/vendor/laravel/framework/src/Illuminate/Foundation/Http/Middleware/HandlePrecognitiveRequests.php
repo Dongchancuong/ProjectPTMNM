@@ -45,9 +45,7 @@ class HandlePrecognitiveRequests
         $this->prepareForPrecognition($request);
 
         return tap($next($request), function ($response) use ($request) {
-            $response->headers->set('Precognition', 'true');
-
-            $this->appendVaryHeader($request, $response);
+            $this->appendVaryHeader($request, $response->header('Precognition', 'true'));
         });
     }
 
@@ -74,9 +72,9 @@ class HandlePrecognitiveRequests
      */
     protected function appendVaryHeader($request, $response)
     {
-        return tap($response, fn () => $response->headers->set('Vary', implode(', ', array_filter([
+        return $response->header('Vary', implode(', ', array_filter([
             $response->headers->get('Vary'),
             'Precognition',
-        ]))));
+        ])));
     }
 }

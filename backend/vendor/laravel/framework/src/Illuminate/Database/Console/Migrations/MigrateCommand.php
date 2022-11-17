@@ -3,7 +3,7 @@
 namespace Illuminate\Database\Console\Migrations;
 
 use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Contracts\Console\Isolatable;
+use Illuminate\Console\View\Components\Task;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Events\SchemaLoaded;
 use Illuminate\Database\Migrations\Migrator;
@@ -12,7 +12,7 @@ use Illuminate\Database\SqlServerConnection;
 use PDOException;
 use Throwable;
 
-class MigrateCommand extends BaseCommand implements Isolatable
+class MigrateCommand extends BaseCommand
 {
     use ConfirmableTrait;
 
@@ -212,7 +212,7 @@ class MigrateCommand extends BaseCommand implements Isolatable
 
             $freshConnection = $this->migrator->resolveConnection($this->option('database'));
 
-            return tap($freshConnection->unprepared("CREATE DATABASE IF NOT EXISTS `{$connection->getDatabaseName()}`"), function () {
+            return tap($freshConnection->unprepared("CREATE DATABASE IF NOT EXISTS {$connection->getDatabaseName()}"), function () {
                 $this->laravel['db']->purge();
             });
         } finally {
