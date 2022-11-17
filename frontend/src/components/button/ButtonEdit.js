@@ -3,11 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Moment from 'moment';//format tiền VNĐ
+import FormQLNhanVien from '../form/FormQLNhanVien'
 
 const ButtonEdit = ({ value }) => {
     const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     return (
@@ -16,7 +15,9 @@ const ButtonEdit = ({ value }) => {
                 Sửa
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            <FormQLNhanVien value={value} type={"edit"} show={show} setshow={setShow} />
+
+            {/* <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Sửa thông tin nhân viên</Modal.Title>
                 </Modal.Header>
@@ -49,7 +50,7 @@ const ButtonEdit = ({ value }) => {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Giới tính</Form.Label>
-                            <Form.Select aria-label="Default select example">
+                            <Form.Select aria-label="Default select example" defaultValue={value.gioitinh}>
                                 <option value="1">Nam</option>
                                 <option value="0">Nữ</option>
                             </Form.Select>
@@ -59,7 +60,7 @@ const ButtonEdit = ({ value }) => {
                             <Form.Control
                                 type="text"
                                 placeholder=""
-                                defaultValue={Moment(value.ngaysinh).format('DD-MM-YYYY')}
+                                defaultValue={Moment(value.ngaysinh).format('DD/MM/YYYY')}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -83,7 +84,7 @@ const ButtonEdit = ({ value }) => {
                             <Form.Control
                                 type="text"
                                 placeholder=""
-                                defaultValue={Moment(value.ngayvaolam).format('DD-MM-YYYY')}
+                                defaultValue={Moment(value.ngayvaolam).format('DD/MM/YYYY')}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -91,7 +92,8 @@ const ButtonEdit = ({ value }) => {
                             <Form.Control
                                 type="text"
                                 placeholder=""
-                                defaultValue={new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value.luong)}
+                                // new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value.luong)
+                                defaultValue={value.luong}
                             />
                         </Form.Group>
                     </Form>
@@ -104,7 +106,7 @@ const ButtonEdit = ({ value }) => {
                         Lưu
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> */}
         </>
     );
 }

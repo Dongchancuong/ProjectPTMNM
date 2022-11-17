@@ -8,7 +8,7 @@ import * as MdIcons from 'react-icons/md';
 const NavBar = ({ title }) => {
     return (
         <div className="Nav-Bar-Admin">
-            <span className='Nav-Bar-Title'>{title}</span>
+            <span className='Nav-Bar-Title  fw-bold fs-5'>{title}</span>
             <Navbar className='Nav-Bar' variant="dark" expand="lg">
                 <Nav className='Nav-Bar'>
                     <NavDropdown

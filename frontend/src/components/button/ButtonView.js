@@ -3,11 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Moment from 'moment';//format tiền VNĐ
+import FormQLNhanVien from '../form/FormQLNhanVien';
 
 const ButtonView = ({ value }) => {
     const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     return (
@@ -15,8 +14,8 @@ const ButtonView = ({ value }) => {
             <Button variant="secondary" onClick={handleShow}>
                 Xem
             </Button>
-
-            <Modal show={show} onHide={handleClose}>
+            <FormQLNhanVien value={value} type={"view"} show={show} setshow={setShow} />
+            {/* <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Xem thông tin nhân viên</Modal.Title>
                 </Modal.Header>
@@ -119,7 +118,7 @@ const ButtonView = ({ value }) => {
                         Đóng
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> */}
         </>
     );
 }

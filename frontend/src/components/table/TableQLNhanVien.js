@@ -1,21 +1,20 @@
-import React from "react"
+import React, { useState } from "react"
 import axios from "axios"
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import filterFactory, { numberFilter, textFilter, dateFilter, selectFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { numberFilter, textFilter, dateFilter, selectFilter, Comparator } from 'react-bootstrap-table2-filter';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import '../../styles/Table.scss';
-import Button from "react-bootstrap/esm/Button";
 import ButtonCreate from "../button/ButtonCreate";
 import ButtonView from "../button/ButtonView";
 import ButtonEdit from "../button/ButtonEdit"
 import ButtonDelete from "../button/ButtonDelete";
+import Button from "react-bootstrap/esm/Button";
 
 class TableQLNhanVien extends React.Component {
     state = {
-        list: [],
-        currentRow: 0
+        list: []
     }
 
     gioitinhFormatter = (cell, row, rowIndex, formatExtraData) => {// Hiển thị Nam hoặc Nữ ở object giới tính
@@ -25,8 +24,7 @@ class TableQLNhanVien extends React.Component {
     }
 
     handleEventButton = (cell, row, rowIndex) => {
-        //this.state.list[this.state.currentRow]
-        // console.log("no:", TableQLNhanVien.state.list)
+
         return (
             <>
                 <ButtonView value={this.state.list[rowIndex]} />
@@ -42,7 +40,35 @@ class TableQLNhanVien extends React.Component {
         }
     }
 
-    columns = [//Title của table
+
+    columnTK = [
+        {
+            text: 'ID Tài Khoản',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm ID Tài Khoản'
+            })
+        },
+        {
+            text: 'ID Chức vụ',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm ID Chức Vụ'
+            })
+        },
+        {
+            text: 'Tên Tài Khoản',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm Tên tài khoản'
+            })
+        },
+        {
+            text: 'Mật khẩu'
+        },
+
+    ]
+    columnNV = [//Title của table
         {
             dataField: 'idnhanvien',
             text: 'ID Nhân Viên',
@@ -76,62 +102,24 @@ class TableQLNhanVien extends React.Component {
                 }
             })
         },
-        // {
-        //     dataField: 'ngaysinh',
-        //     text: 'Ngày sinh',
-        //     sort: true,
-        //     filter: dateFilter(),
-        //     formatter: (cell, row) => {
-        //         return (
-        //             <>{Moment(row.ngaysinh).format('DD-MM-YYYY')}</>
-        //         )
-        //     }
-        // },
         {
             dataField: 'sdt',
             text: 'Số điện thoại',
             sort: true,
-            filter: numberFilter()
+            filter: textFilter({
+                placeholder: 'Tìm số điện thoại'
+            })
         },
         {
             dataField: 'email',
             text: 'Email',
             sort: true,
-            filter: textFilter()
+            filter: textFilter({
+                placeholder: 'Tìm email'
+            })
         },
-        // {
-        //     dataField: 'ngayvaolam',
-        //     text: 'Ngày vào làm',
-        //     sort: true,
-        //     filter: dateFilter(),
-        //     formatter: (cell, row) => {
-        //         return (
-        //             <>{Moment(row.ngayvaolam).format('DD-MM-YYYY')}</>
-        //         )
-        //     }
-        // },
-        // {
-        //     dataField: 'luong',
-        //     text: 'Lương',
-        //     sort: true,
-        //     filter: numberFilter(),
-        //     formatter: (cell, row) => {
-        //         return (
-        //             <>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND'}).format(row.luong)}</>
-        //         )
-        //     }
-        // }
         {
             formatter: this.handleEventButton
-            // formatExtraData: (cell, row, rowIndex) => {
-            //     return (
-            //         <>
-            //             <ButtonView value={row} />
-            //             <Button variant="primary">Sửa</Button>
-            //             <ButtonDelete />
-            //         </>
-            //     )
-            // }
         }
     ];
 
@@ -153,13 +141,13 @@ class TableQLNhanVien extends React.Component {
     render() {
         return (
             <div className="bg-white">
-                {/* <ButtonCreate value={this.list.data} /> */}
+                <ButtonCreate />
                 <BootstrapTable
                     striped
                     hover
                     keyField="id"
                     data={this.state.list}//dữ liệu
-                    columns={this.columns}//tiêu đề
+                    columns={this.columnNV}//tiêu đề
                     pagination={paginationFactory({ sizePerPage: 10 })}//phân trang
                     defaultSorted={this.defaultSorted}
                     filter={filterFactory()}
