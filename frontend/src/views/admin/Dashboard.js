@@ -2,7 +2,6 @@ import React from 'react'
 import NavBarAdmin from '../../components/sidebar/NavBar'
 
 const Dashboard = ({ title }) => {
-  // const title = "Dashboard"
   return (
     <div className='dashboard'>
       <NavBarAdmin title={title} />

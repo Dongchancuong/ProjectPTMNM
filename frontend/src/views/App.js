@@ -1,7 +1,6 @@
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SideBar from '../components/sidebar/SideBar';
-import NavBarAdmin from '../components/sidebar/NavBar'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './admin/Dashboard';
 import AuthAdmin from '../views/admin/Auth'

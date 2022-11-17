@@ -10,7 +10,6 @@ import ButtonCreate from "../button/ButtonCreate";
 import ButtonView from "../button/ButtonView";
 import ButtonEdit from "../button/ButtonEdit"
 import ButtonDelete from "../button/ButtonDelete";
-import Button from "react-bootstrap/esm/Button";
 
 class TableQLNhanVien extends React.Component {
     state = {
@@ -147,7 +146,9 @@ class TableQLNhanVien extends React.Component {
                     hover
                     keyField="id"
                     data={this.state.list}//dữ liệu
-                    columns={this.columnNV}//tiêu đề
+                    columns={this.props.type === "qlnhanvien" ? this.columnNV
+                        : this.props.type === "qltaikhoan" ? this.columnTK
+                            : null}//tiêu đề
                     pagination={paginationFactory({ sizePerPage: 10 })}//phân trang
                     defaultSorted={this.defaultSorted}
                     filter={filterFactory()}
