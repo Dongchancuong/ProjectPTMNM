@@ -733,17 +733,6 @@ class Store implements Session
     }
 
     /**
-     * Set the underlying session handler implementation.
-     *
-     * @param  \SessionHandlerInterface  $handler
-     * @return void
-     */
-    public function setHandler(SessionHandlerInterface $handler)
-    {
-        return $this->handler = $handler;
-    }
-
-    /**
      * Determine if the session handler needs a request.
      *
      * @return bool
