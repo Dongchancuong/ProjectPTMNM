@@ -4,18 +4,26 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Moment from 'moment';//format tiền VNĐ
 import FormQLNhanVien from '../form/FormQLNhanVien'
+import FormQLKhachHang from '../form/FormQLKhachHang';
 
-const ButtonCreate = () => {
+const ButtonCreate = ({ type }) => {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
 
     return (
         <>
             <Button variant="outline-primary" className="fs-5 fw-bold" onClick={handleShow}>
-                Thêm nhân viên
+                Thêm {type === "qlchucvu" ? "chức vụ"
+                    : type === "qltaikhoan" ? "tài khoản"
+                        : type === "qlnhanvien" ? "nhân viên"
+                            : type === "qlkhachhang" ? "khách hàng"
+                                : type === "qlhoadon" ? "hóa đơn"
+                                    : null}
             </Button>
-            
-            <FormQLNhanVien type={"create"} show={show} setshow={setShow} />
+
+            {type === "qlnhanvien" ? <FormQLNhanVien type={"create"} show={show} setshow={setShow} />
+                : type === "qlkhachhang" ? <FormQLKhachHang type={"create"} show={show} setshow={setShow} />
+                    : null}
             {/* <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Thêm thông tin nhân viên</Modal.Title>

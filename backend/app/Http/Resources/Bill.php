@@ -19,6 +19,7 @@ class Bill extends JsonResource
             'email' => $this->email,
             'tonggia' => $this->tonggia,
             'soluong' => $this->soluong,
+            'visible' => $this->visible,
             'created_at' => $this->created_at !== null ? $this->created_at->format('d/m/Y') : null,
             'updated_at' => $this->updated_at !== null ? $this->updated_at->format('d/m/Y') : null,
         ];

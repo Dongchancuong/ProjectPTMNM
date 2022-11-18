@@ -4,8 +4,9 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Moment from 'moment';//format tiền VNĐ
 import FormQLNhanVien from '../form/FormQLNhanVien'
+import FormQLKhachHang from '../form/FormQLKhachHang';
 
-const ButtonEdit = ({ value }) => {
+const ButtonEdit = ({ value, type }) => {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
 
@@ -15,8 +16,9 @@ const ButtonEdit = ({ value }) => {
                 Sửa
             </Button>
 
-            <FormQLNhanVien value={value} type={"edit"} show={show} setshow={setShow} />
-
+            {type === "qlnhanvien" ? <FormQLNhanVien value={value} type={"edit"} show={show} setshow={setShow} />
+                : type === "qlkhachhang" ? <FormQLKhachHang value={value} type={"edit"} show={show} setshow={setShow} />
+                    : null}
             {/* <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Sửa thông tin nhân viên</Modal.Title>

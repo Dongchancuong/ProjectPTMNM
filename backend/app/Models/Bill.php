@@ -20,6 +20,7 @@ class Bill extends Model
         'email',
         'tonggia',
         'soluong',
+        'visible',
         'created_at',
         'updated_at'
     ];

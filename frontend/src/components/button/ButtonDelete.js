@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import FormQLNhanVien from '../form/FormQLNhanVien'
+import FormQLKhachHang from '../form/FormQLKhachHang';
 
-const ButtonDelete = ({ value }) => {
+const ButtonDelete = ({ value, type }) => {
     const [show, setShow] = useState(false);
 
     const handleShow = () => setShow(true);
@@ -14,7 +15,9 @@ const ButtonDelete = ({ value }) => {
                 Xóa
             </Button>
 
-            <FormQLNhanVien value={value} type={"delete"} show={show} setshow={setShow} />
+            {type === "qlnhanvien" ? <FormQLNhanVien value={value} type={"delete"} show={show} setshow={setShow} />
+                : type === "qlkhachhang" ? <FormQLKhachHang value={value} type={"delete"} show={show} setshow={setShow} />
+                    : null}
 
             {/* <Modal show={show} onHide={handleClose} animation={false} centered>
                 <Modal.Header closeButton>

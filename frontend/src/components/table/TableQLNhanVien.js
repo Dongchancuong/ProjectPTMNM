@@ -16,6 +16,12 @@ class TableQLNhanVien extends React.Component {
         list: []
     }
 
+    tinhTrangFormatter = (cell, row, rowIndex, formatExtraData) => {// Hiển thị tình trạng ở object tình trạng
+        return (
+            <>{formatExtraData[cell]}</>
+        );
+    }
+
     gioitinhFormatter = (cell, row, rowIndex, formatExtraData) => {// Hiển thị Nam hoặc Nữ ở object giới tính
         return (
             <>{formatExtraData[cell]}</>
@@ -23,12 +29,11 @@ class TableQLNhanVien extends React.Component {
     }
 
     handleEventButton = (cell, row, rowIndex) => {
-
         return (
             <>
-                <ButtonView value={this.state.list[rowIndex]} />
-                <ButtonEdit value={this.state.list[rowIndex]} />
-                <ButtonDelete value={row} />
+                <ButtonView value={this.state.list[rowIndex]} type={this.props.type} />
+                <ButtonEdit value={this.state.list[rowIndex]} type={this.props.type} />
+                <ButtonDelete value={row} type={this.props.type} />
             </>
         )
     }
@@ -39,8 +44,37 @@ class TableQLNhanVien extends React.Component {
         }
     }
 
-
-    columnTK = [
+    columnCV = [//Title của table Chức Vụ
+        {
+            dataField: 'idchucvu',
+            text: 'ID Chức Vụ',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm ID Chức Vụ'
+            })
+        },
+        {
+            dataField: 'tenchucvu',
+            text: 'Tên Chức Vụ',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm tên chức vụ'
+            })
+        },
+        {
+            dataField: 'visible',
+            text: 'Tình trạng',
+            sort: true,
+            filter: selectFilter({
+                placeholder: 'Chọn tình trạng',
+                options: {
+                    1: 'Hiện',
+                    0: 'Ẩn'
+                }
+            })
+        }
+    ]
+    columnTK = [//Title của table Tài Khoản
         {
             text: 'ID Tài Khoản',
             sort: true,
@@ -67,7 +101,7 @@ class TableQLNhanVien extends React.Component {
         },
 
     ]
-    columnNV = [//Title của table
+    columnNV = [//Title của table Nhân Viên
         {
             dataField: 'idnhanvien',
             text: 'ID Nhân Viên',
@@ -88,16 +122,16 @@ class TableQLNhanVien extends React.Component {
             dataField: 'gioitinh',
             text: 'Giới tính',
             sort: true,
-            formatter: this.gioitinhFormatter,
-            formatExtraData: {
-                0: 'Nữ',
-                1: 'Nam'
-            },
+            // formatter: this.gioitinhFormatter,
+            // formatExtraData: {
+            //     0: 'Nữ',
+            //     1: 'Nam'
+            // },
             filter: selectFilter({
                 placeholder: 'Chọn giới tính ',
                 options: {
-                    0: 'Nữ',
-                    1: 'Nam'
+                    'Nữ': 'Nữ',
+                    'Nam': 'Nam'
                 }
             })
         },
@@ -121,6 +155,98 @@ class TableQLNhanVien extends React.Component {
             formatter: this.handleEventButton
         }
     ];
+    columnKH = [
+        {
+            dataField: 'idkhachhang',
+            text: 'ID Khách Hàng',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm ID Khách Hàng'
+            })
+        },
+        {
+            dataField: 'idtaikhoan',
+            text: 'ID Tài Khoản',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm ID Tài Khoản'
+            })
+        },
+        {
+            dataField: 'hoten',
+            text: 'Họ và tên',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm Họ và Tên'
+            })
+        },
+        {
+            dataField: 'sdt',
+            text: 'Số điện thoại',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm số điện thoại'
+            })
+        },
+        {
+            dataField: 'email',
+            text: 'Email',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm email'
+            })
+        },
+        {
+            formatter: this.handleEventButton
+        }
+    ];
+    columnHD = [
+        {
+            dataField: 'idhoadon',
+            text: 'ID Hóa Đơn',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm ID Hóa Đơn'
+            })
+        },
+        {
+            dataField: 'idkhachhang',
+            text: 'ID Khách Hàng',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm ID Khách Hàng'
+            })
+        },
+        {
+            dataField: 'hoten',
+            text: 'Họ và tên',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm Họ và Tên'
+            })
+        },
+        {
+            dataField: 'visible',
+            text: 'Tình trạng',
+            sort: true,
+            formatter: this.tinhTrangFormatter,
+            formatExtraData: {
+                0: <>Hủy bỏ</>,
+                1: <>Đang chờ</>,
+                2: <>Đã xác nhận</>,
+                3: <>Đang vận chuyển</>
+            },
+            filter: selectFilter({
+                placeholder: 'Chọn tình trạng',
+                options: {
+                    0: <>Hủy bỏ</>,
+                    1: <>Đang chờ</>,
+                    2: <>Đã xác nhận</>,
+                    3: <>Đang vận chuyển</>
+                }
+            })
+        }
+    ];
 
     defaultSorted = [{
         dataField: 'name',
@@ -128,7 +254,14 @@ class TableQLNhanVien extends React.Component {
     }];
 
     async componentDidMount() {
-        let res = await axios.get("http://localhost:8000/api/nv/");
+        let res = await axios.get(
+            this.props.type === "qlchucvu" ? "http://localhost:8000/api/cv/"
+                : this.props.type === "qltaikhoan" ? "http://localhost:8000/api/tk/"
+                    : this.props.type === "qlnhanvien" ? "http://localhost:8000/api/nv/"
+                        : this.props.type === "qlkhachhang" ? "http://localhost:8000/api/kh/"
+                            : this.props.type === "qlhoadon" ? "http://localhost:8000/api/hd/"
+                                : null
+        );
         console.log('check res: ', res.data.data)
         this.setState({
             list: res && res.data && res.data.data ? res.data.data : []
@@ -140,7 +273,7 @@ class TableQLNhanVien extends React.Component {
     render() {
         return (
             <div className="bg-white">
-                <ButtonCreate />
+                <ButtonCreate type={this.props.type} />
                 <BootstrapTable
                     striped
                     hover
@@ -148,8 +281,11 @@ class TableQLNhanVien extends React.Component {
                     data={this.state.list}//dữ liệu
                     columns={this.props.type === "qlnhanvien" ? this.columnNV
                         : this.props.type === "qltaikhoan" ? this.columnTK
-                            : null}//tiêu đề
-                    pagination={paginationFactory({ sizePerPage: 10 })}//phân trang
+                            : this.props.type === "qlchucvu" ? this.columnCV
+                                : this.props.type === "qlkhachhang" ? this.columnKH
+                                    : this.props.type === "qlhoadon" ? this.columnHD
+                                        : null}//tiêu đề
+                    pagination={paginationFactory({ sizePerPage: 10 })}//có lỗi phân trang
                     defaultSorted={this.defaultSorted}
                     filter={filterFactory()}
                     rowEvents={this.rowEvents}

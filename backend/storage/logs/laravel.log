@@ -18213,3 +18213,12 @@ Did you mean one of these?
 #57 C:\\Users\\Admin\\Desktop\\New folder (2)\\ProjectPTMNM\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('...')
 #58 {main}
 "} 
+[2022-11-18 11:16:32] local.ERROR: Command "sẻve" is not defined. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"sẻve\" is not defined. at C:\\Users\\ocbtc\\Desktop\\PTPMMNM\\PMMaNguonMo\\ProjectPTMNM\\backend\\vendor\\symfony\\console\\Application.php:692)
+[stacktrace]
+#0 C:\\Users\\ocbtc\\Desktop\\PTPMMNM\\PMMaNguonMo\\ProjectPTMNM\\backend\\vendor\\symfony\\console\\Application.php(259): Symfony\\Component\\Console\\Application->find()
+#1 C:\\Users\\ocbtc\\Desktop\\PTPMMNM\\PMMaNguonMo\\ProjectPTMNM\\backend\\vendor\\symfony\\console\\Application.php(171): Symfony\\Component\\Console\\Application->doRun()
+#2 C:\\Users\\ocbtc\\Desktop\\PTPMMNM\\PMMaNguonMo\\ProjectPTMNM\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(102): Symfony\\Component\\Console\\Application->run()
+#3 C:\\Users\\ocbtc\\Desktop\\PTPMMNM\\PMMaNguonMo\\ProjectPTMNM\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(151): Illuminate\\Console\\Application->run()
+#4 C:\\Users\\ocbtc\\Desktop\\PTPMMNM\\PMMaNguonMo\\ProjectPTMNM\\backend\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
