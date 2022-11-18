@@ -10,6 +10,7 @@ class Customer extends JsonResource
     {
         return [
             'idkhachhang' => $this->idkhachhang,
+            'idtaikhoan' => $this->idtaikhoan,
             'hoten' => $this->hoten,
             'sdt' => $this->sdt,
             'diachi' => $this->diachi,
