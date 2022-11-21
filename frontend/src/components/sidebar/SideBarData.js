@@ -93,13 +93,6 @@ export const SideBarData = [
         isActive: true
     },
     {
-        title: 'Phiếu đặt hàng',
-        path: '/qlphieudathang',
-        icon: <AiIcons.AiFillFileText/>,
-        color: '#1385d6',
-        isActive: true
-    },
-    {
         title: 'Phiếu nhập hàng',
         path: '/qlphieunhaphang',
         icon: <AiIcons.AiFillCopy/>,

@@ -11,7 +11,7 @@ import ButtonView from "../button/ButtonView";
 import ButtonEdit from "../button/ButtonEdit"
 import ButtonDelete from "../button/ButtonDelete";
 
-class TableQLNhanVien extends React.Component {
+class Table extends React.Component {
     state = {
         list: [],
         lastid: null,
@@ -312,4 +312,4 @@ class TableQLNhanVien extends React.Component {
     }
 }
 
-export default TableQLNhanVien
+export default Table
