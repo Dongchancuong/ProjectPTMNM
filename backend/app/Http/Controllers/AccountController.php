@@ -49,8 +49,18 @@ class AccountController extends Controller
 
     public function store(Request $request)
     {
+       
         $request['idtaikhoan'] = $this->getNewID();
         $input = $request->all(); 
+        $query = Account::where('tentaikhoan', '=', $request['tentaikhoan'])->get();
+        if (!empty($query[0]->tentaikhoan)) {
+            $arr = [
+                'success' => false,
+                'message' => 'Tên tài khoản bị trùng',
+                'data' => []
+              ];
+              return response()->json($arr, 200);
+        }
         $validator = Validator::make($input, [
             'idtaikhoan' => 'required',
             'idchucvu' => 'required',
@@ -100,28 +110,28 @@ class AccountController extends Controller
         return response()->json($arr, 200);
     }
 
-    public function destroy(Request $request)
+    public function destroy($idtaikhoan)
     {
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'idtaikhoan' => 'required',
-        ]);
-        if($validator->fails()){
-           $arr = [
-             'success' => false,
-             'message' => 'Lỗi kiểm tra dữ liệu',
-             'data' => $validator->errors()
-           ];
-           return response()->json($arr, 200);
-        }
-        $empAcc = Employee::select('idtaikhoan')->where('idtaikhoan', '=', $input['idtaikhoan'])->get();
-        $cusAcc = Customer::select('idtaikhoan')->where('idtaikhoan', '=', $input['idtaikhoan'])->get();
+        // $input = $request->all();
+        // $validator = Validator::make($input, [
+        //     'idtaikhoan' => 'required',
+        // ]);
+        // if($validator->fails()){
+        //    $arr = [
+        //      'success' => false,
+        //      'message' => 'Lỗi kiểm tra dữ liệu',
+        //      'data' => $validator->errors()
+        //    ];
+        //    return response()->json($arr, 200);
+        // }
+        $empAcc = Employee::select('idtaikhoan')->where('idtaikhoan', '=', $idtaikhoan)->get();
+        $cusAcc = Customer::select('idtaikhoan')->where('idtaikhoan', '=', $idtaikhoan)->get();
         if (!empty($empAcc[0]->idtaikhoan) || !empty($cusAcc[0]->idtaikhoan)) {
             $status = false;
             $message = 'Tài khoản đã được sử dụng';
         }
         else {
-            Account::find($input['idtaikhoan'])->delete();
+            Account::find($idtaikhoan)->delete();
             $status = true;
             $message = 'Tài khoản đã được xóa';
         }

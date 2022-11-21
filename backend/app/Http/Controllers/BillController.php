@@ -22,21 +22,31 @@ class BillController extends Controller
         return response()->json($arr, 200);
     }
 
+    public function getNewID()
+    {
+        $last_id = Bill::select('idhoadon')->orderBy('idhoadon', 'DESC')->first();
+        $split_id = str_split($last_id['idhoadon'], 2);
+        $newid = $split_id['1'] + 1;
+        if ($newid < 10) $idhd= "HD0".$newid;
+        else $idhd = "HD".$newid;
+        return idhd;
+    }
+
     public function store(Request $request)
     {
         $input = $request->all(); 
+        $input['hoadon'] = $this->getNewID();
         $validator = Validator::make($input, [
+            'idhoadon' => 'required',
             'idkhachhang' => 'required',
             'idkhuyenmai' => 'nullable',
-            'idphieudh' => 'required',
-            'idnhanvien' => 'required',
+            'idnhanvien' => 'nullable',
             'hoten' => 'required',
             'diachi' => 'required',
             'sdt' => 'required',
-            'email' => 'nullable',
+            'email' => 'required',
             'tonggia' => 'required',
             'soluong' => 'required',
-            'ngaylap' => 'required',
         ]);
         if($validator->fails()){
            $arr = [
@@ -46,7 +56,8 @@ class BillController extends Controller
            ];
            return response()->json($arr, 200);
         }
-        $bill = bill::create($input);
+        $bill = Bill::create($input);
+        (new AccountController)->store($request);
         $arr = ['status' => true,
            'message'=>"Thêm hóa đơn thành công",
            'data'=> new BillResource($bill)
@@ -58,15 +69,9 @@ class BillController extends Controller
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'idkhuyenmai' => 'nullable',
+            'idhoadon' => 'required',
             'idnhanvien' => 'required',
-            'hoten' => 'required',
-            'diachi' => 'required',
-            'sdt' => 'required',
-            'email' => 'nullable',
-            'tonggia' => 'required',
-            'soluong' => 'required',
-            'ngaylap' => 'required',
+            'visible' => 'required'
         ]);
         if($validator->fails()){
            $arr = [
@@ -76,15 +81,9 @@ class BillController extends Controller
            ];
            return response()->json($arr, 200);
         }
-        $bill->idkhuyenmai = $input['idkhuyenmai'];
+        $bill = Bill::find($input['idhoadon']);
         $bill->idnhanvien = $input['idnhanvien'];
-        $bill->hoten = $input['hoten'];
-        $bill->diachi = $input['diachi'];
-        $bill->sdt = $input['sdt'];
-        $bill->email = $input['email'];
-        $bill->tonggia = $input['tonggia'];
-        $bill->soluong = $input['soluong'];
-        $bill->ngaylap = $input['ngaylap'];
+        $bill->visible = $input['visible'];
         $bill->save();
         $arr = [
            'status' => true,
@@ -94,14 +93,14 @@ class BillController extends Controller
         return response()->json($arr, 200);
     }
 
-    public function destroy(Bill $bill)
-    {
-        $bill->delete();
-        $arr = [
-            'status' => true,
-            'message' =>'Hóa đơn đã được xóa',
-            'data' => [],
-        ];
-        return response()->json($arr, 200);
-    }
+    // public function destroy(Bill $bill)
+    // {
+    //     $bill->delete();
+    //     $arr = [
+    //         'status' => true,
+    //         'message' =>'Hóa đơn đã được xóa',
+    //         'data' => [],
+    //     ];
+    //     return response()->json($arr, 200);
+    // }
 }

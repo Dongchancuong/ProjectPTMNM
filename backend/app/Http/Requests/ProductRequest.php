@@ -40,7 +40,6 @@ class ProductRequest extends FormRequest
             'idloaimay'=>'max:10',
             'idchatlieu'=>'max:15',
             'xuatxu'=>'max:100',
-            'anh'=>'regex:/(\d)+.(?:jpe?g|png|gif)/'
         ];
     }
 
@@ -50,10 +49,10 @@ class ProductRequest extends FormRequest
         throw new HttpResponseException(response()->json([
 
             'success'   => false,
-            'message'   => 'Product Error',
+            'message'   => 'Thất bại',
             'data'      => $validator->errors()
 
-        ]));
+        ]),400);
 
     }
     
@@ -76,7 +75,6 @@ class ProductRequest extends FormRequest
             'soluong.required'          => 'Số lượng sản phẩm không được để trống',
             'dongia.required'           => 'Đơn giá sản phẩm không được để trống',    
             'xuatxu.max'                => 'Xuất xứ chỉ được tối đa 5 ký tự',   
-            'anh.*'                     => 'Định dạng hình ảnh phải là jpeg,jpg,png',
         ];
 
     }

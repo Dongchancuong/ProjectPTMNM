@@ -12,7 +12,6 @@ class Position extends Model
     protected $fillable = [
         'idchucvu',
         'tenchucvu',
-        'visible',
         'created_at',
         'updated_at'
     ];

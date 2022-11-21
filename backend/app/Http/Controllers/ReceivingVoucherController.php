@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\ReceivingVoucher;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RecevivingVoucherRequest;
 use App\Http\Resources\ReceivingVoucher as ResourceRE;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ReceivingVoucherDetail as ResourceREDetail;
+use App\Models\Product;
+use App\Models\ReceivingVoucherDetail;
 
 class ReceivingVoucherController extends Controller
 {
@@ -28,68 +30,63 @@ class ReceivingVoucherController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display the specified resource.
      *
+     * @param  \App\Models\ReceivingVoucher  $receivingVoucher
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function show($id)
     {
-        //
+        $Detail= ReceivingVoucher::find($id);
+        if (empty($Detail)) {
+            $arr = [
+            'status' => false,
+            'message' => 'Không tìm thấy phiếu nhập hàng này',
+        ];
+            return response()->json($arr, 400);
+        }
+        $arr = [
+            'status' => true,
+            'message' => "Thông tin chi tiết phiếu nhập hàng",
+            'data'=>$Detail->RVoucherDetail,  
+        ];
+            return response()->json($arr, 200);
     }
 
+    
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RecevivingVoucherRequest $request)
     {
-        $input = $request->all(); 
-        $input['visible']=1;
-        $validator = Validator::make($input, [
-            'idpnh' => 'required',
-            'idnhanvien' => 'required' ,           
-            'idnhacungcap' => 'required',         
-            'id' => 'required',
-            'idnhanvien' => 'required' ,           
-            'idnhacungcap' => 'required',   
-        ]);
-        if($validator->fails()){
-           $arr = [
-             'success' => false,
-             'message' => 'Lỗi kiểm tra dữ liệu',
-             'data' => $validator->errors()
-           ];
-           return response()->json($arr, 200);
+        $re=$request->all();
+        if(!(ReceivingVoucher::find($request->idpn))){
+            $arr = [
+                'status' => true,
+                'message'=>"Mã nhập hàng đã tồn tại",
+            ];
+            return response()->json($arr, 400);
         }
-        $trademark = ReceivingVoucher::create($input);
-        $arr = ['status' => true,
-           'message'=>"Đã thêm thương hiệu thành công",
-           'data'=> new ResourceRE($trademark)
+        $re['idpnh']=$request->idpnh;        
+        $re['idnhanvien']=$request->idnhanvien;
+        $re['idnhacungcap']=$request->idnhacungcap;
+        ReceivingVoucher::create($re);        
+        $redetail['idpnh']=$request->idpnh;            
+        $redetail['idsanpham']=$request->idsanpham;
+        $redetail['soluong']=$request->soluong;
+        ReceivingVoucherDetail::create($redetail);
+        $product=Product::find($request->idsanpham);
+        $product->soluong+=$request->soluong;
+        $product->save();
+        $arr = [
+            'status' => true,
+            'message'=>"Đã thêm phiếu nhập hàng thành công",
+            'data'=> new ResourceRE($re) ,
+            'datadetail'=> new ResourceREDetail($redetail)
         ];
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ReceivingVoucher  $receivingVoucher
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ReceivingVoucher $receivingVoucher)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ReceivingVoucher  $receivingVoucher
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ReceivingVoucher $receivingVoucher)
-    {
-        //
+        return response()->json($arr, 201);
     }
 }

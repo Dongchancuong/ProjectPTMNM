@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PromotionRequest;
 use Illuminate\Http\Request;
 use App\Models\Promotion;
 use App\Http\Resources\Promotion as PromotionResource;
@@ -26,42 +27,16 @@ class PromotionController extends Controller
          ];
           return response()->json($arr, 200);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PromotionRequest $request)
     {
         //Thêm khuyến mãi 
         $input = $request->all();
-        $validator = Validator::make($input, [
-            'idkhuyenmai' => 'required',
-            'giamgia' => 'required', 
-            'mota' => 'required',
-            'ngaybatdau' => 'required', 
-            'ngayketthuc' => 'required',
-        ]);
-        if ($validator->fails()) {
-            $arr = [
-                'success' => false,
-                'message' => 'Lỗi kiểm tra dữ liệu',
-                'data' => $validator->errors()
-            ];
-            return response()->json($arr, 200);
-        }
         $promotion = Promotion::create($input);
         $arr = [
             'status' => true,
@@ -69,46 +44,7 @@ class PromotionController extends Controller
             'data' => new PromotionResource($promotion)
         ];
         return response()->json($arr, 201);
-
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //Hiện thông tin chi tiết khuyến mãi
-        $promotion = Promotion::find($id);
-        if (is_null($promotion)) {
-           $arr = [
-             'success' => false,
-             'message' => 'Không có chương trình khuyến mãi này',
-             'dara' => []
-           ];
-           return response()->json($arr, 200);
-        }
-        $arr = [
-          'status' => true,
-          'message' => "Chi tiết chương trình khuyến mãi",
-          'data'=> new PromotionResource($promotion)
-        ];
-        return response()->json($arr, 201);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -116,53 +52,51 @@ class PromotionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Promotion $promotion)
+    public function update(PromotionRequest $request,$id)
     {
         //Cập nhật chương trình khuyến mãi
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            //'idkhuyenmai'=>'required',
-           'giamgia' => 'required', 
-           'mota' => 'required',
-           'ngaybatdau' =>'required',
-           'ngayketthuc' => 'required'
-        ]);
-        if($validator->fails()){
-           $arr = [
-             'success' => false,
-             'message' => 'Lỗi kiểm tra dữ liệu',
-             'data' => $validator->errors()
-           ];
-           return response()->json($arr, 200);
-        }
-        $promotion -> idkhuyenmai = $input['idkhuyenmai'];
-        $promotion -> giamgia = $input['giamgia'];
-        $promotion -> mota = $input['mota'];
-        $promotion -> ngaybatdau = $input['ngaybatdau'];
-        $promotion -> ngayketthuc = $input['ngayketthuc'];
-        $promotion -> save();
+        $promotion=Promotion::find($id);
+        if(!$promotion){
             $arr = [
+                'success' => false,
+                'message' => 'Không tìm thấy chương trình khuyến mãi này',
+              ];
+              return response()->json($arr, 400);
+        }
+        $promotion->idkhuyenmai=$request->idkhuyenmai;
+        $promotion->tenchuongtrinh=$request->tenchuongtrinh;
+        $promotion->giamgia=$request->giamgia;
+        $promotion->ngayketthuc=$request->ngayketthuc;
+        $promotion->ngaybatdau=$request->ngaybatdau;
+        $promotion -> save();
+        $arr = [
             'status' => true,
-            'message' => 'Sản phẩm cập nhật thành công',
+            'message' => 'Đã cập nhật thành công chương trình khuyến mãi',
             'data' => new PromotionResource($promotion)
         ];
         return response()->json($arr, 200);
     }
-
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Promotion $promotion)
+    public function Hide($id)
     {
-        //
-        $promotion->delete();
+        $promotion=Promotion::find($id);
+        $promotion['visible']='0';
+        if(!$promotion){
+            $arr = [
+                'success' => false,
+                'message' => 'Không tìm thấy chương trình khuyến mãi này',
+            ];
+            return response()->json($arr, 400);
+        }
+        $promotion->update();
         $arr = [
            'status' => true,
-           'message' =>'Sản phẩm đã được xóa',
-           'data' => [],
+           'message' =>'Chương trình này đã được ẩn thành công',
         ];
         return response()->json($arr, 200);
     }

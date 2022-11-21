@@ -112,21 +112,21 @@ class EmployeeController extends Controller
     }
 
 
-  public function destroy(Request $request, Employee $employee)
+  public function destroy($idnhanvien)
   {
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'idnhanvien' => 'required', 
-        ]);
-        if($validator->fails()){
-          $arr = [
-            'success' => false,
-            'message' => 'Lỗi kiểm tra dữ liệu',
-            'data' => $validator->errors()
-          ];
-          return response()->json($arr, 200);
-        }
-        $employee = Employee::find($input['idnhanvien']);
+        // $input = $request->all();
+        // $validator = Validator::make($input, [
+        //     'idnhanvien' => 'required', 
+        // ]);
+        // if($validator->fails()){
+        //   $arr = [
+        //     'success' => false,
+        //     'message' => 'Lỗi kiểm tra dữ liệu',
+        //     'data' => $validator->errors()
+        //   ];
+        //   return response()->json($arr, 200);
+        // }
+        $employee = Employee::find($idnhanvien);
         $employee->idtaikhoan = null;
         $employee->visible = 0;
         $employee->save();

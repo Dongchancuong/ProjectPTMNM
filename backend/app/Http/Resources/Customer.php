@@ -10,13 +10,14 @@ class Customer extends JsonResource
     {
         return [
             'idkhachhang' => $this->idkhachhang,
-            'idtaikhoan' => $this->idtaikhoan,
+            'idtaihkoan' => $this->idtaikhoan,
             'hoten' => $this->hoten,
             'sdt' => $this->sdt,
             'diachi' => $this->diachi,
             'email' => $this->email,
             'tichluy' => $this->tichluy,
             'capdo' => $this->capdo,
+            'visible' => $this->visible,
             'created_at' => $this->created_at !== null ? $this->created_at->format('d/m/Y') : null,
             'updated_at' => $this->updated_at !== null ? $this->updated_at->format('d/m/Y') : null,
         ];

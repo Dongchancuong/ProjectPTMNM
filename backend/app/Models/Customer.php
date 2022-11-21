@@ -11,13 +11,17 @@ class Customer extends Model
     protected $table = 'khachhang';
     protected $fillable = [
         'idkhachhang',
+        'idtaikhoan',
         'hoten',
         'sdt',
         'diachi',
         'email',
         'tichluy',
         'capdo',
+        'visible',
         'created_at',
         'updated_at'
     ];
+    protected $primaryKey = 'idkhachhang';
+    public $incrementing = false;
 }

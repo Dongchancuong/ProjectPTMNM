@@ -16,8 +16,8 @@ class Promotion extends JsonResource
     {
         return [
         'idkhuyenmai'=> $this->idkhuyenmai,
+        'tenchuongtrinh'    => $this->tenchuongtrinh,
         'giamgia'    => $this->giamgia,
-        'mota'       => $this->mota,
         'ngaybatdau' => $this->ngaybatdau,
         'ngayketthuc'=> $this->ngayketthuc,
         'created_at' => $this->created_at !== null ? $this->created_at->format('d/m/Y') : null,

@@ -32,27 +32,20 @@ class MachineTypeRequest extends FormRequest
     }
     public function failedValidation(Validator $validator)
     {
-
         throw new HttpResponseException(response()->json([
-
             'success'   => false,
-            'message'   => 'Machine Type Error',
+            'message'   => 'Thất bại',
             'data'      => $validator->errors()
 
-        ]));
-
+        ]),400);
     }
-    
     public function messages()
-
     {
-
         return [
-            'idloaimay.required'                => 'Mã loại máy không được để trống',
-            'idloaimay.max'               => 'Mã loại máy chỉ được tối đa 10 ký tự',
-            'tenloaimay.required'               => 'Tên loại máy cấp không được để trống',
-            'tenloaimay.max'       => 'Tên loại máy chỉ được tối đa 100 ký tự',
+            'idloaimay.required'         => 'Mã loại máy không được để trống',
+            'idloaimay.max'              => 'Mã loại máy chỉ được tối đa 10 ký tự',
+            'tenloaimay.required'        => 'Tên loại máy không được để trống',
+            'tenloaimay.max'             => 'Tên loại máy chỉ được tối đa 100 ký tự',
         ];
-
     }
 }

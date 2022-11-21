@@ -18,12 +18,13 @@ class Product extends Model
         'soluong',
         'dongia',
         'visible',
-        'created_at',
-        'updated_at',
     ];
     protected $primaryKey = 'idsanpham';
     public $incrementing = false;
     public function ProductDetail(){
         return $this->hasOne(ProductDetail::class,'idsanpham','idsanpham');
+    }  
+    public function Promotion(){
+        return $this->hasOne(Promotion::class,'idkhuyennmai','idkhuyenmai');
     }
 }

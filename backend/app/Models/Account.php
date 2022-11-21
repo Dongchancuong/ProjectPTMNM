@@ -2,13 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\Account as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Account extends Model
 {
@@ -19,7 +14,6 @@ class Account extends Model
         'idchucvu',
         'tentaikhoan',
         'matkhau',
-        'visible',
         'created_at',
         'updated_at'
     ];

@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\MachineType;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MachineTypeRequest;
 use App\Http\Resources\MachineType as MachineTypeResource;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class MachineTypeController extends Controller
 {
@@ -17,7 +16,6 @@ class MachineTypeController extends Controller
      */
     public function index()
     {
-        //
         $machineType= MachineType::all();
         $arr = [
         'status' => true,
@@ -28,68 +26,21 @@ class MachineTypeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MachineTypeRequest $request)
     {
         //
         $input = $request->all(); 
-        $validator = Validator::make($input, [
-            'idloaimay' => 'required',
-            'tenloaimay' => 'required'
-        ]);
-        if($validator->fails()){
-           $arr = [
-             'success' => false,
-             'message' => 'Lỗi kiểm tra dữ liệu',
-             'data' => $validator->errors()
-           ];
-           return response()->json($arr, 200);
-        }
-        $machineType = MachineType::create($input);
-        $arr = ['status' => true,
-           'message'=>"Loại máy được thêm thành công",
-           'data'=> new MachineTypeResource($machineType)
+        MachineType::create($input);
+        $arr = [
+            'status' => true,
+            'message'=>"Loại máy được thêm thành công",
         ];
         return response()->json($arr, 201);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\MachineType  $machineType
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $input =MachineType::find($id);
-        if (is_null($input)) {
-            $arr = [
-            'success' => false,
-            'message' => 'Không tìm thấy loại máy này',
-            'data' => $input,
-            ];
-            return response()->json($arr, 200);
-        }
-        $arr = [
-           'status' => true,
-           'message' => 'Dã tìm thấy loại máy cần tìm',
-           'data' => new MachineTypeResource($input),
-        ];
-        return response()->json($arr, 200);
     }
 
     /**
@@ -99,24 +50,22 @@ class MachineTypeController extends Controller
      * @param  \App\Models\MachineType  $machineType
      * @return \Illuminate\Http\Response
      */
-    public function update(MachineType $request,$id)
+    public function update(MachineTypeRequest $request,$id)
     {
         $input =MachineType::find($id);
         if (is_null($input)) {
             $arr = [
             'success' => false,
-            'message' => 'Không có sản phẩm này',
-            'data' => $input
+            'message' => 'Không tìm thấy loại máy này',
             ];
-            return response()->json($arr, 200);
+            return response()->json($arr, 400);
         }
-        $input['tenloaimay']=$request->tenlloaimay;
-        $input['visible']=$request->visible;
-        $input->update();
+        $input->idloaimay=$request->idloaimay;
+        $input->tenloaimay=$request->tenloaimay;
+        $input->save();
         $arr = [
            'status' => true,
            'message' => 'Cập nhật thành công',
-           'data' => new MachineTypeResource($input),
         ];
         return response()->json($arr, 200);
     }
@@ -127,23 +76,21 @@ class MachineTypeController extends Controller
      * @param  \App\Models\MachineType  $machineType
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function Hide($id)
     {
         $input =MachineType::find($id);
         if (!$input) {
             $arr = [
             'success' => false,
-            'message' => 'Không có sản phẩm này',
-            'data' => []
+            'message' => 'Không tìm thấy loại máy này',
             ];
-            return response()->json($arr, 200);
+            return response()->json($arr, 400);
         } 
         $input->visible='0';
         $input->save();
         $arr = [
            'status' => true,
-           'message' => 'Loại máy đã được ẩn thành công',
-           'data' => new MachineTypeResource($input),
+           'message' => 'Loại máy này đã được ẩn thành công',
         ];
         return response()->json($arr, 200);
     }

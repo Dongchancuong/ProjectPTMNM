@@ -22,10 +22,9 @@ class ProductDetail extends Model
     ];
     protected $primaryKey = 'idsanpham';
     public $incrementing = false;
-    public function trademark()
-    {
+    public function Trademask(){
         return $this->belongsTo(Trademark::class,'idthuonghieu','idsanpham');
-    } 
+    }
     public function color()
     {
         return $this->belongsTo(Color::class,'idmau','idsanpham');

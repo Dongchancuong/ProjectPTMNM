@@ -12,4 +12,7 @@ class Trademark extends Model
     protected $fillable=['idthuonghieu','tenthuonghieu','visible'];
     protected $primaryKey = 'idthuonghieu';
     public $incrementing = false;
+    public function ProductDetail(){
+        return $this->hasMany(ProductDetail::class,'idthuonghieu','idthuonghieu');
+    }
 }

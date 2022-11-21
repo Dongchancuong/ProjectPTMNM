@@ -36,9 +36,9 @@ class MaterialRequest extends FormRequest
         throw new HttpResponseException(response()->json([
 
             'success'             => false,
-            'message'             => 'Material Error',
+            'message'             => 'Thất bại',
             'data'                => $validator->errors()
-        ]));
+        ]),400);
     }
     
     public function messages()

@@ -30,22 +30,18 @@ class SupplierRequest extends FormRequest
             'tennhacungcap'=>'required|max:100',
             'diachi'=>'required',
             'email'=>'required|email',
-            'sdt'=>'required|10',
+            'sdt'=>'required|digits:10',
         ];
     }
     public function failedValidation(Validator $validator)
     {
-
         throw new HttpResponseException(response()->json([
 
             'success'   => false,
-            'message'   => 'Supplier Error',
+            'message'   => 'Thất bại',
             'data'      => $validator->errors()
-
-        ]));
-
+        ]),400);
     }
-    
     public function messages()
     {
         return [
@@ -57,8 +53,7 @@ class SupplierRequest extends FormRequest
             'email.required'                => 'email không được để trống',
             'email.email'                   => 'Sai định dạng email',
             'sdt.required'                  => 'Số điện thoại không được để trống',
-            'sdt.max'                       => 'Số điện thoại chỉ được tối đa 10 ký tự',
+            'sdt.digits'                    => 'Số điện thoại không đủ 10 số',
         ];
-
     }
 }

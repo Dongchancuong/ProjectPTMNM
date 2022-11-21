@@ -50,6 +50,8 @@ class CustomerController extends Controller
             'email' => 'required',
             'tichly' => 'required',
             'capdo' => 'required',
+            'tentaikhoan' => 'required',
+            'matkhau' => 'required'
         ]);
         if($validator->fails()){
            $arr = [
@@ -110,21 +112,21 @@ class CustomerController extends Controller
         return response()->json($arr, 200);
     }
 
-    public function destroy(Request $request, Customer $customer)
+    public function destroy($idkhachhang)
     {
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'idkhachhang' => 'required'
-        ]);
-        if($validator->fails()){
-           $arr = [
-             'success' => false,
-             'message' => 'Lỗi kiểm tra dữ liệu',
-             'data' => $validator->errors()
-           ];
-           return response()->json($arr, 200);
-        }
-        $customer = Customer::find($input['idkhachhang']);
+        // $input = $request->all();
+        // $validator = Validator::make($input, [
+        //     'idkhachhang' => 'required'
+        // ]);
+        // if($validator->fails()){
+        //    $arr = [
+        //      'success' => false,
+        //      'message' => 'Lỗi kiểm tra dữ liệu',
+        //      'data' => $validator->errors()
+        //    ];
+        //    return response()->json($arr, 200);
+        // }
+        $customer = Customer::find($idkhachhang);
         $customer->idtaikhoan = null;
         $customer->visible = 0;
         $customer->save();

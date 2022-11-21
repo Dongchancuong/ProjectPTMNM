@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PositionDetailController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Position;
+use App\Models\Account;
 use App\Http\Resources\Position as PositionResource;
 
 
@@ -27,9 +29,7 @@ class PositionController extends Controller
         $input = $request->all(); 
         $validator = Validator::make($input, [
             'idchucvu' => 'required',
-            'tenchucvu' => 'required',
-            'updated_at' => date("Y-m-d H:i:s"),
-            'created_at' => date("Y-m-d H:i:s"),
+            'tenchucvu' => 'required'
         ]);
         if($validator->fails()){
            $arr = [
@@ -39,28 +39,13 @@ class PositionController extends Controller
            ];
            return response()->json($arr, 200);
         }
-
-        $position = new PositionResource;
-        $position->idchucvu = $input['idchucvu'];
-        $position->tenchucvu = $input['tenchucvu'];
-        $position->created_at = $input['created_at'];
-        $position->updated_at = $input['updated_at'];
-        $query = Position::insert([
-            ['idchucvu' => $position->idchucvu, 'tenchucvu' => $position->tenchucvu, 'created_at' => $position->created_at, 'updated_at' => $position->updated_at]
-        ]);
-        
-        if ($query->fail()){
-            $arr = ['status' => false,
-            'message'=>"Truy vấn thất bại",
-            ];
-        return response()->json($arr, 200);
-        }
-        else {
-            $arr = ['status' => true,
-            'message'=>"Thêm chức vụ thành công",
-            'data'=> new PositionResource($position),
-            ];
-        return response()->json($arr, 201);}
+        $position = Position::create($input);
+        (new PositionDetailController)->newDetail($input['idchucvu']);
+        $arr = ['status' => true,
+           'message'=>"Thêm chức vụ thành công",
+           'data'=> new PositionResource($position),
+        ];
+        return response()->json($arr, 201);
     }
 
     public function update(Request $request, Position $position)
@@ -68,8 +53,7 @@ class PositionController extends Controller
         $input = $request->all();
         $validator = Validator::make($input, [
             'idchucvu' => 'required',
-            'tenchucvu' => 'required',
-            'updated_at' => 'required'
+            'tenchucvu' => 'required'
         ]);
         if($validator->fails()){
            $arr = [
@@ -79,7 +63,7 @@ class PositionController extends Controller
            ];
            return response()->json($arr, 200);
         }
-        $position->idchucvu = $input['idchucvu'];
+        $position = Position::find($input['idchucvu']);
         $position->tenchucvu = $input['tenchucvu'];
         $position->save();
         $arr = [
@@ -90,12 +74,45 @@ class PositionController extends Controller
         return response()->json($arr, 200);
     }
 
-    public function destroy(Request $request)
-    {
+    public function destroy($idchucvu)
+    {   
+        // $input = $request->all();
+        // $validator = Validator::make($input, [
+        //     'idchucvu' => 'required',
+        // ]);
+        // if($validator->fails()){
+        //    $arr = [
+        //      'success' => false,
+        //      'message' => 'Lỗi kiểm tra dữ liệu',
+        //      'data' => $validator->errors()
+        //    ];
+        //    return response()->json($arr, 200);
+        // }
+
+        if ($idchucvu === 'QL') {
+            $arr = [
+                'status' => false,
+                'message' => 'Không được xóa chức vụ này',
+                'data' => [],
+            ];
+            return response()->json($arr, 200);
+        }
+
+        $query = Account::select('idchucvu')->where('idchucvu', '=', $idchucvu)->get();
+        if (!empty($query[0]->idchucvu)) {
+            $status = false;
+            $message = 'Chức vụ đang được sử dụng';
+        }
+        else {
+            (new PositionDetailController)->destroy($idchucvu);
+            Position::where('idchucvu', $idchucvu)->delete();
+            $status = true;
+            $message = 'Chức vụ đã được xóa';
+        }
         $arr = [
-            'status' => true,
-            'message' =>'Chức vụ đã được xóa',
-            'data' => Position::where('idchucvu', '=', $request['idchucvu'])->update(['visible' => 0]),
+            'status' => $status,
+            'message' => $message,
+            'data' => [],
         ];
         return response()->json($arr, 200);
     }

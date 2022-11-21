@@ -34,25 +34,19 @@ class TrademaskRequest extends FormRequest
     {
 
         throw new HttpResponseException(response()->json([
-
             'success'   => false,
-            'message'   => 'Trademask Error',
+            'message'   => 'Thất bại',
             'data'      => $validator->errors()
-
-        ]));
+        ]),400);
 
     }
-    
     public function messages()
-
     {
-
         return [
             'idthuonghieu.required'         => 'Mã thương hiệu không được để trống',
             'idthuonghieu.max'              => 'Mã thương hiệu chỉ được tối đa 40 ký tự',
             'tenthuonghieu.required'        => 'Tên thương hiệu cấp không được để trống',
             'tenthuonghieu.max'             => 'Tên thương hiệu chỉ được tối đa 100 ký tự',
         ];
-
     }
 }

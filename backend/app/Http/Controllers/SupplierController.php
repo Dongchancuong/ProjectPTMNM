@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SupplierRequest;
 use App\Http\Resources\Supplier as SupplierResource;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class SupplierController extends Controller
 {
@@ -17,8 +16,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
-        $supplier = Supplier::all();
+        $supplier = Supplier::all()->sortByDesc('timestamp');
         $arr = [
         'status' => true,
         'message' => "Danh sách nhà cung cấp",
@@ -32,29 +30,15 @@ class SupplierController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SupplierRequest $request)
     {
         //Cập nhập danh sách
         $input = $request->all(); 
-        $validator = Validator::make($input, [
-            'idnhacungcap' => 'required',
-            'tennhacungcap' => 'required',
-            'diachi'=> 'required',
-            'email'=> 'required|email',
-            'sdt'=> 'required',
-        ]);
-        if($validator->fails()){
-           $arr = [
-             'success' => false,
-             'message' => 'Lỗi kiểm tra dữ liệu',
-             'data' => $validator->errors()
-           ];
-           return response()->json($arr, 200);
-        }
         $supplier= Supplier::create($input);
-        $arr = ['status' => true,
-           'message'=>"Nhà cung cấp được thêm thành công",
-           'data'=> new SupplierResource($supplier),
+        $arr = [
+            'status' => true,
+            'message'=>"Nhà cung cấp được thêm thành công",
+            'data'=> new SupplierResource($supplier),
         ];
         return response()->json($arr, 201);
     }
@@ -65,35 +49,26 @@ class SupplierController extends Controller
      * @param  \App\Models\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
-    public function update($id)
+    public function update(SupplierRequest $request,$id)
     {
-        //
         $input =Supplier::find($id);
-        $validator=Validator::make($input,[
-                'tennhacungcap' => 'required',
-                'diachi' => 'required', 
-                'sdt' => 'required',
-                'email' => 'required|email',
-                'visible' => 'required', 
-        ]);
-        if ($validator->fails()) {
+        if (!$input) {
             $arr = [
             'success' => false,
-            'message' => 'Không có sản phẩm này',
-            'data' => $validator->errors()
+            'message' => 'Không tìm thấy nhà cung cấp này',
             ];
-            return response()->json($arr, 200);
-        }
-        $input['tennhacungcap']=$input->tennhacungcap;
-        $input['diachi']=$input->diachi;
-        $input['email']=$input->email;
-        $input['sdt']=$input->sdt;
-        $input['visible']=$input->visible;
-        $input->update();
+            return response()->json($arr, 400);
+        } 
+        $input->idnhacungcap=$request->idnhacungcap;
+        $input->tennhacungcap=$request->tennhacungcap;
+        $input->email=$request->email;
+        $input->diachi=$request->diachi;
+        $input->email=$request->email;
+        $input->save();
         $arr = [
            'status' => true,
            'message' => 'Cập nhật thành công',
-           'data' => new Supplier($input),
+           'data' => new SupplierResource($input),
         ];
         return response()->json($arr, 200);
     }
@@ -104,26 +79,24 @@ class SupplierController extends Controller
      * @param  \App\Models\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
-    public function delete($id)
+    public function Hide($id)
     {
-        //
         $input =Supplier::find($id);
         if (!$input) {
             $arr = [
             'success' => false,
-            'message' => 'Không có sản phẩm này',
-            'data' => []
+            'message' => 'Không tìm thấy nhà cung cấp này',
             ];
-            return response()->json($arr, 200);
+            return response()->json($arr, 400);
         } 
         $input->visible='0';
-        $input->update();
+        $input->save();
         $arr = [
            'status' => true,
-           'message' => 'nhà cung cấp đã được ẩn thành công',
+           'message' => 'Nhà cung cấp đã được ẩn thành công',
            'data' => new SupplierResource($input),
         ];
-        return response()->json($arr, 200);
+            return response()->json($arr, 200);
     }
     
 }

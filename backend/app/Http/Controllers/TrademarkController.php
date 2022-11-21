@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Trademark;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TrademaskRequest;
 use App\Http\Resources\Trademark as TrademarkResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class TrademarkController extends Controller
 {
@@ -17,7 +17,7 @@ class TrademarkController extends Controller
      */
     public function index()
     {
-        $Trademark = Trademark::all();
+        $Trademark = Trademark::all()->sortByDesc('timestamp');;
         $arr = [
         'status' => true,
         'message' => "Danh sách thương hiệu",
@@ -33,25 +33,12 @@ class TrademarkController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $input = $request->all(); 
-        $input['visible']=1;
-        $validator = Validator::make($input, [
-            'idthuonghieu' => 'required',
-            'tenthuonghieu' => 'required'            
-        ]);
-        if($validator->fails()){
-           $arr = [
-             'success' => false,
-             'message' => 'Lỗi kiểm tra dữ liệu',
-             'data' => $validator->errors()
-           ];
-           return response()->json($arr, 200);
-        }
         $trademark = Trademark::create($input);
-        $arr = ['status' => true,
-           'message'=>"Đã thêm thương hiệu thành công",
-           'data'=> new TrademarkResource($trademark)
+        $arr = [
+            'status' => true,
+            'message'=>"Đã thêm thương hiệu thành công",
+            'data'=> new TrademarkResource($trademark)
         ];
         return response()->json($arr, 200);
     }
@@ -68,59 +55,45 @@ class TrademarkController extends Controller
         //Cập nhật thương hiệu
         $input =Trademark::find($id);
         if (is_null($input)) {
-            $arr = [
-            'success' => false,
-            'message' => 'Không có sản phẩm này',
-            'data' => $input
+            $arr = [  
+                'success' => false,
+                'message' => 'Không có thương hiệu này',
             ];
-            return response()->json($arr, 200);
+            return response()->json($arr, 400);
         }
         $input['tenthuonghieu']=$request->tenthuonghieu;
         $input['visible']=$request->visible;
         $input->update();
         $arr = [
            'status' => true,
-           'message' => 'Cập nhật thành công',
+           'message' => 'Cập nhật thương hiệu thành công',
            'data' => new TrademarkResource($input),
         ];
         return response()->json($arr, 200);
         
     }
-     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\MachineType  $machineType
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        
-    }
-
-
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Trademark  $trademark
      * @return \Illuminate\Http\Response
      */
-    public function delete($id)
+    public function Hide($id)
     {
         //
         $input =Trademark::find($id);
         if (!$input) {
             $arr = [
             'success' => false,
-            'message' => 'Không có sản phẩm này',
-            'data' => []
+            'message' => 'Không có thương hiệu này',
             ];
-            return response()->json($arr, 200);
+            return response()->json($arr, 400);
         } 
         $input->visible='0';
         $input->update();
         $arr = [
            'status' => true,
-           'message' => 'thương hiệu đã được ẩn thành công',
+           'message' => 'Thương hiệu này đã được ẩn thành công',
            'data' => new TrademarkResource($input),
         ];
         return response()->json($arr, 200);

@@ -6,10 +6,7 @@ use App\Models\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\Product as ProductResource;
-use App\Http\Resources\ProductDetail as PDetailResource;
-use App\Models\ProductDetail;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -20,16 +17,14 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::all()->sortByDesc('timestamp');
+        $product=Product::with('ProductDetail')->get();
         $arr = [
         'status' => true,
         'message' => "Danh sách sản phẩm",
-        'data'=>ProductResource::collection($product)
+        'data'=>$product,
         ];
         return response()->json($arr, 200);
-        
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -45,7 +40,16 @@ class ProductController extends Controller
             'tensanpham'=>$request->tensanpham,
             'soluong'=>$request->soluong,
             'dongia'=>$request->dongia,
-        ]);
+        ]);   
+        if($request->hasFile('anh')){
+            $file=$request->anh;
+            $extension=$file->getClientOriginalExtension();
+            $filename=time().'-'.'product'.'.'.$extension;
+            $name=$file->move(public_path('upload'),$filename);
+        }
+        else{
+            unset($request['image']);
+        }
         $product->ProductDetail()->create([
             'idsanpham'=>$request->idsanpham,
             'idthuonghieu'=>$request->idthuonghieu,
@@ -55,7 +59,7 @@ class ProductController extends Controller
             'gioitinh'=>$request->gioitinh,
             'xuatxu'=>$request->xuatxu,
             'mota'=>$request->mota,
-            'anh'=>$request->anh
+            'anh'=>$name,
         ]);
         $arr = [
             'status' => true,
@@ -64,32 +68,7 @@ class ProductController extends Controller
         ];
         return response()->json($arr, 201);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $product = Product::with('ProductDetail')->find($id);
-        if (empty($product)) {
-            $arr = [
-            'success' => false,
-            'message' => 'Không có sản phẩm này',
-            'data' => []
-            ];
-            return response()->json($arr, 200);
-        }
-        $arr = [
-            'status' => true,
-            'message' => "Chi tiết sản phẩm",
-            'data'=> new ProductResource($product),
-            'datadetail'=> new PDetailResource($product->ProductDetail),
-            ];
-        return response()->json($arr, 201);
-    }
+    
     /**
      * Update the specified resource in storage.
      *
@@ -97,7 +76,7 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(ProductRequest $request,$id)
     {
         $product = Product::with('ProductDetail')->find($id);
             $product->idkhuyenmai=$request->idkhuyenmai;
@@ -105,7 +84,28 @@ class ProductController extends Controller
             $product->tensanpham=$request->tensanpham;
             $product->soluong=$request->soluong;
             $product->dongia=$request->dongia;
-            $product->save();
+            $product->save();    
+        if (is_null($product)) {
+            $arr = [
+            'success' => false,
+            'message' => 'Không có sản phẩm này',
+            ];
+            return response()->json($arr, 400);
+        };
+        if($request->file('anh')!=''){
+                $destination=public_path('upload').$product->file('anh');
+                if(File::exists($destination)){
+                    File::delete($destination);
+                }
+                $file=$request->anh;
+                $extension=$file->getClientOriginalExtension();
+                $filename=time().'-'.'product'.'.'.$extension;
+                $file->move(public_path('upload'),$filename);
+                $request->anh=$filename;
+            }
+        else{
+            unset($request->anh);
+         }
         $product->ProductDetail()->update([
             'idthuonghieu'=>$request->idthuonghieu,
             'idmau'=>$request->idmau,
@@ -116,18 +116,9 @@ class ProductController extends Controller
             'mota'=>$request->mota,
             'anh'=>$request->anh
         ]);
-        if (is_null($product)) {
-            $arr = [
-            'success' => false,
-            'message' => 'Không có sản phẩm này',
-            'data' => []
-            ];
-            return response()->json($arr, 200);
-        };
         $arr = [
            'status' => true,
            'message' => 'Cập nhật thành công',
-           'data' => new ProductResource($product),
         ];
         return response()->json($arr, 200);
     }
@@ -138,23 +129,21 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function delete($id)
+    public function Hide($id)
     {
         $input =Product::find($id);
         if (!$input) {
             $arr = [
             'success' => false,
             'message' => 'Không có sản phẩm này',
-            'data' => []
             ];
-            return response()->json($arr, 200);
+            return response()->json($arr, 400);
         } 
         $input->visible='0';
         $input->save();
         $arr = [
            'status' => true,
-           'message' => 'Vô hiệu hóa sản phẩm thành công',
-           'data' => new ProductResource($input),
+           'message' => 'Sản phẩm này đã được ẩn thành công',
         ];
         return response()->json($arr, 200);
     }

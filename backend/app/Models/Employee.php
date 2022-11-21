@@ -20,6 +20,7 @@ class Employee extends Model
         'email',
         'ngayvaolam',
         'luong',
+        'visible',
         'created_at',
         'updated_at'
     ];

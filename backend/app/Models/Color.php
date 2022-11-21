@@ -12,4 +12,7 @@ class Color extends Model
     protected $fillable=['idmau','tenmau','visible'];
     protected $primaryKey = 'idmau';
     public $incrementing = false;
+    public function ProductDetail(){
+        return $this->hasMany(ProductDetail::class,'idmau','idmau');
+    }
 }

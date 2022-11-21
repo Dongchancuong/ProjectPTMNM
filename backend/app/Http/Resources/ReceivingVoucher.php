@@ -15,12 +15,11 @@ class ReceivingVoucher extends JsonResource
     public function toArray($request)
     {
         return [
-        'idpnh'         => $this -> idpnh,
-        'idnhanvien'    => $this -> idnhanvien,
-        'idnhacungcap'  => $this -> idnhacungcap,
-        // 'ngaynhap'      => $this -> ngaynhap,
-            'created_at'       => $this -> created_at,
-            'updated_at'       => $this -> updated_at,
+        'idpnh'             => $this -> idpnh,
+        'idnhanvien'        => $this -> idnhanvien,
+        'idnhacungcap'      => $this -> idnhacungcap,
+        'created_at'        => $this -> created_at,
+        'updated_at'        => $this -> updated_at,
         ];
     }
 }

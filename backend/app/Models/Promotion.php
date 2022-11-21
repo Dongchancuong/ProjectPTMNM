@@ -18,4 +18,7 @@ class Promotion extends Model
         'created_at',
         'updated_at'
     ];
+    public function Product(){
+        return $this->hasMany(Promotion::class,'idkhuyennmai','idkhuyennmai');
+    }
 }

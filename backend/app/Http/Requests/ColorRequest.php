@@ -32,27 +32,21 @@ class ColorRequest extends FormRequest
     }
     public function failedValidation(Validator $validator)
     {
-
         throw new HttpResponseException(response()->json([
 
             'success'   => false,
-            'message'   => 'Color Error',
+            'message'   => 'Thất bại',
             'data'      => $validator->errors()
-
-        ]));
-
+        ]),400);
     }
     
     public function messages()
-
     {
-
         return [
             'idmau.required'        => 'Mã màu không được để trống',
             'idmau.max'             => 'Mã màu chỉ được tối đa 10 ký tự',
             'tenmau.required'       => 'Tên màu cấp không được để trống',
             'tenmau.max'            => 'Tên màu chỉ được tối đa 100 ký tự',
         ];
-
     }
 }
