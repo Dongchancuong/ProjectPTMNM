@@ -43,7 +43,8 @@ use App\Http\Controllers\EmployeeController;
 Route::get('nv', [EmployeeController::class, 'index']);
 Route::post('nv/add', [EmployeeController::class, 'store']);
 Route::put('nv/update', [EmployeeController::class, 'update']);
-Route::get('nv/lastid', [EmployeeController::class, 'lastid']);
+Route::get('nv/getnewid', [EmployeeController::class, 'getnewid']);
+Route::delete('nv/delete', [EmployeeController::class, 'destroy']);
 
 //Quản lý khách hàng
 use App\Http\Controllers\CustomerController;

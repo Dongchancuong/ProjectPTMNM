@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import axios from "axios"
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
@@ -10,6 +10,7 @@ import ButtonCreate from "../button/ButtonCreate";
 import ButtonView from "../button/ButtonView";
 import ButtonEdit from "../button/ButtonEdit"
 import ButtonDelete from "../button/ButtonDelete";
+import ButtonChucVu from "../button/ButtonChucVu";
 
 class Table extends React.Component {
     state = {
@@ -34,9 +35,10 @@ class Table extends React.Component {
     handleEventButton = (cell, row, rowIndex) => {
         return (
             <>
-                {this.props.type === "qltaikhoan" ? null : <ButtonView value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.listTK} />}
-                <ButtonEdit value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.listTK} />
-                <ButtonDelete value={row} type={this.props.type} />
+                {this.props.type === "qlchucvu" ? <ButtonChucVu></ButtonChucVu> : null}
+                {this.props.type === "qltaikhoan" || this.props.type === "qlchucvu" ? null : <ButtonView value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.listTK} />}
+                {this.props.type === "qlchucvu" ? null : <ButtonEdit value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.listTK} />}
+                {this.props.type === "qlchucvu" ? null : <ButtonDelete value={row} type={this.props.type} />}
             </>
         )
     }
@@ -62,18 +64,6 @@ class Table extends React.Component {
             sort: true,
             filter: textFilter({
                 placeholder: 'Tìm tên chức vụ'
-            })
-        },
-        {
-            dataField: 'visible',
-            text: 'Tình trạng',
-            sort: true,
-            filter: selectFilter({
-                placeholder: 'Chọn tình trạng',
-                options: {
-                    1: 'Hiện',
-                    0: 'Ẩn'
-                }
             })
         }
     ]
@@ -276,7 +266,7 @@ class Table extends React.Component {
             list: res && res.data && res.data.data ? res.data.data : []
         })
 
-        let res2 = await axios.get("http://localhost:8000/api/nv/lastid")
+        let res2 = await axios.get("http://localhost:8000/api/nv/getnewid")
         this.setState({
             lastid: res2.data.data
         })
@@ -292,7 +282,7 @@ class Table extends React.Component {
     render() {
         return (
             <div className="bg-white">
-                {this.props.type === "qltaikhoan" || this.props.type === "qlkhachhang" ? null : <ButtonCreate type={this.props.type} lastid={this.state.lastid} idtaikhoan={this.state.listTK} />}
+                {this.props.type === "qlkhachhang" ? null : <ButtonCreate type={this.props.type} lastid={this.state.lastid} idtaikhoan={this.state.listTK} />}
                 <BootstrapTable
                     striped
                     hover

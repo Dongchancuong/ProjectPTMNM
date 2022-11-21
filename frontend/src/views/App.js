@@ -15,6 +15,7 @@ import QLPhieuNhapHang from './admin/QLPhieuNhapHang';
 import QLCTKhuyenMai from './admin/QLCTKhuyenMai';
 import QLNhaCungCap from './admin/QLNhaCungCap';
 import { useState } from 'react';
+import ThongTinTK from './admin/ThongTinTK';
 
 function App() {
   const [dangnhap, setDangnhap] = useState(false)
@@ -49,6 +50,7 @@ function App() {
             <Route exact path='/qlphieunhaphang' element={<QLPhieuNhapHang title={"Quản lý phiếu nhập hàng"} />} />
             <Route exact path='/qlchuongtrinhkhuyenmai' element={<QLCTKhuyenMai title={"Quản lý chương trình khuyến mãi"} />} />
             <Route exact path='/qlnhacungcap' element={<QLNhaCungCap title={"Quản lý nhà cung cấp"} />} />
+            <Route exact path='/thongtintaikhoan' element={<ThongTinTK />} />
             <Route exact path='/AuthCustomer' element={<AuthCustomer />} />
           </Routes>
         </div >

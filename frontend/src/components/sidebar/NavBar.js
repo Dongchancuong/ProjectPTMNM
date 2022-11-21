@@ -1,9 +1,9 @@
 import '../../styles/NavBar.scss'
 import Nav from 'react-bootstrap/Nav';
+import { Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import * as MdIcons from 'react-icons/md';
-
 
 const NavBar = ({ title }) => {
     return (
@@ -16,7 +16,7 @@ const NavBar = ({ title }) => {
                         title="Xin chào, Phúc Hải!"
                         menuVariant="dark"
                     >
-                        <NavDropdown.Item href="#action/3.1">Thông tin tài khoản</NavDropdown.Item>
+                        <NavDropdown.Item><Link to="/thongtintaikhoan">Thông tin tài khoản</Link></NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item href="/">
                             <div className='Sub-Icon'>

@@ -9,43 +9,42 @@ const FormQLNhanVien = (props) => {
 
     console.log("ID tai khoan: ", props.idtaikhoan)
 
-    const [idnhanvien, setIdnhanvien] = useState(props.lastid)
-    const [idtaikhoan, setIdtaikhoan] = useState(null)
-    const [hoten, setHoten] = useState(null)
-    const [email, setEmail] = useState(null)
-    const [gioitinh, setGioitinh] = useState(null)
-    const [ngaysinh, setNgaysinh] = useState(null)
-    const [sdt, setSdt] = useState(null)
-    const [diachi, setDiachi] = useState(null)
-    const [ngayvaolam, setNgayvaolam] = useState(null)
-    const [luong, setLuong] = useState(null)
+    const [idnhanvien, setIdnhanvien] = useState(props.type === "edit" || props.type === "view" ? props.value.idnhanvien : props.type === "create" ? props.lastid : null)
+    const [idtaikhoan, setIdtaikhoan] = useState(props.type === "edit" || props.type === "view" ? props.value.idtaikhoan : null)
+    const [hoten, setHoten] = useState(props.type === "edit" || props.type === "view" ? props.value.hoten : null)
+    const [email, setEmail] = useState(props.type === "edit" || props.type === "view" ? props.value.email : null)
+    const [gioitinh, setGioitinh] = useState(props.type === "edit" || props.type === "view" ? props.value.gioitinh : null)
+    const [ngaysinh, setNgaysinh] = useState(props.type === "edit" || props.type === "view" ? props.value.ngaysinh : null)
+    const [sdt, setSdt] = useState(props.type === "edit" || props.type === "view" ? props.value.sdt : null)
+    const [diachi, setDiachi] = useState(props.type === "edit" || props.type === "view" ? props.value.diachi : null)
+    const [ngayvaolam, setNgayvaolam] = useState(props.type === "edit" || props.type === "view" ? props.value.ngayvaolam : null)
+    const [luong, setLuong] = useState(props.type === "edit" ? props.value.luong : props.type === "view" ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(props.value.luong) : null)
 
     const [listnv, setListnv] = useState()
 
     const handleClose = () => props.setshow(false)
 
+    const setListNhanVien = () => setListnv([{//set dinh dang list nhan vien
+        idnhanvien: props.type === "create" ? props.lastid : idnhanvien,
+        idtaikhoan: idtaikhoan,
+        hoten: hoten,
+        email: email,
+        gioitinh: gioitinh,
+        ngaysinh: ngaysinh,
+        sdt: sdt,
+        diachi: diachi,
+        ngayvaolam: ngayvaolam,
+        luong: luong
+    }])
     //Luu nhan vien
-    const saveNV = async (e) => {
+    const saveCreateNV = async (e) => {
         e.preventDefault()
 
-        setListnv([{
-            idnhanvien: props.lastid,
-            idtaikhoan: idtaikhoan,
-            hoten: hoten,
-            email: email,
-            gioitinh: gioitinh,
-            ngaysinh: ngaysinh,
-            sdt: sdt,
-            diachi: diachi,
-            ngayvaolam: ngayvaolam,
-            luong: luong
-        }])
+        setListNhanVien()
 
         console.log(listnv[0])
         let res = await axios.post('http://localhost:8000/api/nv/add', listnv[0])
-        console.log(res.data.status)
-        if (res.data.status === 201) {
-            // console.log(res.data.message)
+        if (res.data.status === true) {
             setIdtaikhoan(null)
             setHoten(null)
             setEmail(null)
@@ -55,6 +54,41 @@ const FormQLNhanVien = (props) => {
             setDiachi(null)
             setNgayvaolam(null)
             setLuong(null)
+            handleClose()
+        }
+    }
+
+    const saveEditNV = async (e) => {
+        e.preventDefault()
+        setListNhanVien()
+        console.log(listnv)
+        if (listnv === undefined) { }
+        else {
+            console.log("Edit list>>>", listnv[0])
+            let res = await axios.put('http://localhost:8000/api/nv/update', listnv[0])
+            console.log(res.data.status)
+            if (res.data.status === true) {
+                // console.log(res.data.message)
+                setIdtaikhoan(null)
+                setHoten(null)
+                setEmail(null)
+                setGioitinh(null)
+                setNgaysinh(null)
+                setSdt(null)
+                setDiachi(null)
+                setNgayvaolam(null)
+                setLuong(null)
+                handleClose()
+            }
+        }
+    }
+
+    const saveDeleteNV = async (e) => {
+        e.preventDefault()
+        console.log(props.value.idnhanvien)
+        let res = await axios.delete('http://localhost:8000/api/nv/delete', props.value.idnhanvien)
+        if (res.data.status === true) {
+            handleClose()
         }
     }
 
@@ -117,7 +151,7 @@ const FormQLNhanVien = (props) => {
                         <Button variant="secondary" onClick={handleClose}>
                             Đóng
                         </Button>
-                        <Button variant="primary" onClick={handleClose}>
+                        <Button variant="primary" onClick={saveDeleteNV}>
                             Xác nhận
                         </Button>
                     </Modal.Footer>
@@ -138,19 +172,18 @@ const FormQLNhanVien = (props) => {
                                     type="text"
                                     name="idnhanvien"
                                     placeholder="Nhập ID nhân viên"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.idnhanvien : props.type === "create" ? props.lastid : idnhanvien}
-                                    readOnly={props.type === "edit" || props.type === "view" ? true : false}
+                                    defaultValue={idnhanvien}
+                                    readOnly
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>ID Tài Khoản</Form.Label>
                                 <Form.Select aria-label="Default select example"
                                     name="idtaikhoan"
-                                    value={props.type === "edit" || props.type === "view" ? props.value.idtaikhoan : idtaikhoan}
+                                    value={idtaikhoan}
                                     onChange={inputIdtaikhoan}
                                 >
                                     <option value="-1">Chọn ID Tài Khoản</option>
-                                    {/* {console.log("Idtaikhoan: ", props.idtaikhoan)} */}
                                     {props.idtaikhoan ? props.idtaikhoan.map((item, index) =>
                                         <option key={index} value={item.idtaikhoan}>{item.idtaikhoan}</option>
                                     ) : null}
@@ -163,7 +196,7 @@ const FormQLNhanVien = (props) => {
                                     type="text"
                                     name="hoten"
                                     placeholder="Nhập họ và tên"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.hoten : hoten}
+                                    defaultValue={hoten}
                                     onChange={inputHoten}
                                     readOnly={props.type === "view" ? true : false}
                                 />
@@ -174,7 +207,7 @@ const FormQLNhanVien = (props) => {
                                     type="email"
                                     name="email"
                                     placeholder="Nhập email"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.email : email}
+                                    defaultValue={email}
                                     onChange={inputEmail}
                                     // value={field.email}
                                     readOnly={props.type === "view" ? true : false}
@@ -184,7 +217,7 @@ const FormQLNhanVien = (props) => {
                                 <Form.Label>Giới tính</Form.Label>
                                 <Form.Select aria-label="Default select example"
                                     name="gioitinh"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.gioitinh : gioitinh}
+                                    defaultValue={gioitinh}
                                     // value={field.gioitinh}
                                     onChange={inputGioitinh}
                                 >
@@ -211,7 +244,7 @@ const FormQLNhanVien = (props) => {
                                     type="number"
                                     name="sdt"
                                     placeholder="Nhập số điện thoại"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.sdt : sdt}
+                                    defaultValue={sdt}
                                     onChange={inputSdt}
                                     // value={field.sdt}
                                     readOnly={props.type === "view" ? true : false}
@@ -224,7 +257,7 @@ const FormQLNhanVien = (props) => {
                                     name="diachi"
                                     placeholder="Nhập địa chỉ"
                                     rows={2}
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.diachi : diachi}
+                                    defaultValue={diachi}
                                     onChange={inputDiachi}
                                     // value={field.diachi}
                                     readOnly={props.type === "view" ? true : false}
@@ -249,7 +282,7 @@ const FormQLNhanVien = (props) => {
                                     name="luong"
                                     placeholder="Nhập lương"
                                     // new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value.luong)
-                                    defaultValue={props.type === "edit" ? props.value.luong : props.type === "view" ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(props.value.luong) : luong}
+                                    defaultValue={luong}
                                     onChange={inputLuong}
                                     // value={field.luong}
                                     readOnly={props.type === "view" ? true : false}
@@ -261,7 +294,7 @@ const FormQLNhanVien = (props) => {
                                     <Form.Label>Ngày tạo</Form.Label>
                                     <Form.Control
                                         type={props.type === "create" ? "date" : "text"}
-                                        placeholder="Nhập ngày vào làm"
+                                        placeholder="Nhập tạo"
                                         defaultValue={props.type === "create" ? null : Moment(props.type === "edit" || props.type === "view" ? props.value.create_at : null).format('DD/MM/YYYY')}
                                         readOnly={props.type === "view" ? true : false}
                                     />
@@ -271,9 +304,9 @@ const FormQLNhanVien = (props) => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>Đóng</Button>
-                        {props.type === "edit" || props.type === "create"
-                            ? <Button variant="primary" onClick={saveNV}>Lưu</Button>//
-                            : null
+                        {props.type === "create" ? <Button variant="primary" onClick={saveCreateNV}>Lưu</Button>
+                            : props.type === "edit" ? <Button variant="primary" onClick={saveEditNV}>Lưu</Button>
+                                : null
                         }
                     </Modal.Footer>
                 </Modal>}
