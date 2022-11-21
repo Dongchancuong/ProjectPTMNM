@@ -13,7 +13,10 @@ import ButtonDelete from "../button/ButtonDelete";
 
 class TableQLNhanVien extends React.Component {
     state = {
-        list: []
+        list: [],
+        lastid: null,
+        listNV: this.props.listNV,
+        listTK: []
     }
 
     tinhTrangFormatter = (cell, row, rowIndex, formatExtraData) => {// Hiển thị tình trạng ở object tình trạng
@@ -76,6 +79,7 @@ class TableQLNhanVien extends React.Component {
     ]
     columnTK = [//Title của table Tài Khoản
         {
+            dataField: 'idtaikhoan',
             text: 'ID Tài Khoản',
             sort: true,
             filter: textFilter({
@@ -83,6 +87,7 @@ class TableQLNhanVien extends React.Component {
             })
         },
         {
+            dataField: 'idchucvu',
             text: 'ID Chức vụ',
             sort: true,
             filter: textFilter({
@@ -90,6 +95,7 @@ class TableQLNhanVien extends React.Component {
             })
         },
         {
+            dataField: 'tentaikhoan',
             text: 'Tên Tài Khoản',
             sort: true,
             filter: textFilter({
@@ -97,6 +103,7 @@ class TableQLNhanVien extends React.Component {
             })
         },
         {
+            dataField: 'matkhau',
             text: 'Mật khẩu'
         },
 
@@ -256,15 +263,25 @@ class TableQLNhanVien extends React.Component {
     async componentDidMount() {
         let res = await axios.get(
             this.props.type === "qlchucvu" ? "http://localhost:8000/api/cv/"
-                : this.props.type === "qltaikhoan" ? "http://localhost:8000/api/tk/"
+                : this.props.type === "qltaikhoan" ? "http://localhost:8000/api/tk"
                     : this.props.type === "qlnhanvien" ? "http://localhost:8000/api/nv/"
                         : this.props.type === "qlkhachhang" ? "http://localhost:8000/api/kh/"
                             : this.props.type === "qlhoadon" ? "http://localhost:8000/api/hd/"
                                 : null
         );
-        console.log('check res: ', res.data.data)
+
         this.setState({
             list: res && res.data && res.data.data ? res.data.data : []
+        })
+
+        let res2 = await axios.get("http://localhost:8000/api/nv/lastid")
+        this.setState({
+            lastid: res2.data.data
+        })
+
+        let res3 = await axios.get("http://localhost:8000/api/tk")
+        this.setState({
+            listTK: res3 && res3.data && res3.data.data ? res3.data.data : []
         })
     }
 
@@ -273,7 +290,7 @@ class TableQLNhanVien extends React.Component {
     render() {
         return (
             <div className="bg-white">
-                <ButtonCreate type={this.props.type} />
+                {this.props.type === "qltaikhoan" || this.props.type === "qlkhachhang" ? null : <ButtonCreate type={this.props.type} lastid={this.state.lastid} idtaikhoan={this.state.listTK} />}
                 <BootstrapTable
                     striped
                     hover

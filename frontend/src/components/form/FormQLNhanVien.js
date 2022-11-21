@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -7,47 +7,103 @@ import axios from 'axios';
 
 const FormQLNhanVien = (props) => {
 
-    console.log(props)
-    const [field, setField] = useState([{
-        idnhanvien: null,
-        idtaikhoan: null,
-        hoten: null,
-        email: null,
-        gioitinh: null,
-        ngaysinh: null,
-        sdt: null,
-        diachi: null,
-        ngayvaolam: null,
-        luong: null
-    }])
+    console.log(props.idtaikhoan)
+
+    const [idnhanvien, setIdnhanvien] = useState(props.lastid)
+    const [idtaikhoan, setIdtaikhoan] = useState(null)
+    const [hoten, setHoten] = useState(null)
+    const [email, setEmail] = useState(null)
+    const [gioitinh, setGioitinh] = useState(null)
+    const [ngaysinh, setNgaysinh] = useState(null)
+    const [sdt, setSdt] = useState(null)
+    const [diachi, setDiachi] = useState(null)
+    const [ngayvaolam, setNgayvaolam] = useState(null)
+    const [luong, setLuong] = useState(null)
+
+    const [listnv, setListnv] = useState()
 
     const handleClose = () => props.setshow(false)
 
+    //Luu nhan vien
     const saveNV = async (e) => {
         e.preventDefault()
-        let res = await axios.post('http://localhost:8000/api/nv/add', field)
-        if (res.data.status === 200) {
+
+        setListnv([{
+            idnhanvien: props.lastid,
+            idtaikhoan: idtaikhoan,
+            hoten: hoten,
+            email: email,
+            gioitinh: gioitinh,
+            ngaysinh: ngaysinh,
+            sdt: sdt,
+            diachi: diachi,
+            ngayvaolam: ngayvaolam,
+            luong: luong
+        }])
+
+        console.log(listnv[0])
+        let res = await axios.post('http://localhost:8000/api/nv/add', listnv[0])
+        console.log(res.data.status)
+        if (res.data.status === 201) {
             // console.log(res.data.message)
-            this.setField({
-                idnhanvien: null,
-                idtaikhoan: null,
-                hoten: null,
-                email: null,
-                gioitinh: null,
-                ngaysinh: null,
-                sdt: null,
-                diachi: null,
-                ngayvaolam: null,
-                luong: null
-            })
+            setIdtaikhoan(null)
+            setHoten(null)
+            setEmail(null)
+            setGioitinh(null)
+            setNgaysinh(null)
+            setSdt(null)
+            setDiachi(null)
+            setNgayvaolam(null)
+            setLuong(null)
         }
     }
 
-    const handleInput = (e) => {
-        this.setField({
-            [e.target.field.idnhanvien]: e.target.value
-        })
+    const inputIdtakhoan = (e) => {
+        e.preventDefault()
+        setIdtaikhoan(e.target.value)
+        console.log(idtaikhoan)
     }
+    const inputHoten = (e) => {
+        e.preventDefault()
+        setHoten(e.target.value)
+        console.log(hoten)
+    }
+    const inputEmail = (e) => {
+        e.preventDefault()
+        setEmail(e.target.value)
+        console.log(email)
+    }
+    const inputGioitinh = (e) => {
+        e.preventDefault()
+        setGioitinh(e.target.value)
+        console.log(gioitinh)
+    }
+    const inputNgaysinh = (e) => {
+        e.preventDefault()
+        setNgaysinh(e.target.value)
+        console.log(ngaysinh)
+    }
+    const inputSdt = (e) => {
+        e.preventDefault()
+        setSdt(e.target.value)
+        console.log(sdt)
+    }
+    const inputDiachi = (e) => {
+        e.preventDefault()
+        setDiachi(e.target.value)
+        console.log(diachi)
+    }
+    const inputNgayvaolam = (e) => {
+        e.preventDefault()
+        setNgayvaolam(e.target.value)
+        console.log(ngayvaolam)
+    }
+    const inputLuong = (e) => {
+        e.preventDefault()
+        setLuong(e.target.value)
+        console.log(luong)
+    }
+
 
     return (
         <>
@@ -80,10 +136,9 @@ const FormQLNhanVien = (props) => {
                                 <Form.Label>ID Nhân Viên</Form.Label>
                                 <Form.Control
                                     type="text"
+                                    name="idnhanvien"
                                     placeholder="Nhập ID nhân viên"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.idnhanvien : null}
-                                    onChange={handleInput}
-                                    value={field.idnhanvien}
+                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.idnhanvien : props.type === "create" ? props.lastid : idnhanvien}
                                     readOnly={props.type === "edit" || props.type === "view" ? true : false}
                                 />
                             </Form.Group>
@@ -92,9 +147,11 @@ const FormQLNhanVien = (props) => {
                                 <Form.Label>ID Tài Khoản</Form.Label>
                                 <Form.Control
                                     type="text"
+                                    name="idtaikhoan"
                                     placeholder="Chọn ID tài khoản"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.idtaikhoan : null}
-                                    value={field.idtaikhoan}
+                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.idtaikhoan : idtaikhoan}
+                                    onChange={inputIdtakhoan}
+                                    // value={field.idtaikhoan}
                                     readOnly={props.type === "view" ? true : false}
                                 />
                             </Form.Group>
@@ -102,9 +159,11 @@ const FormQLNhanVien = (props) => {
                                 <Form.Label>Họ và tên</Form.Label>
                                 <Form.Control
                                     type="text"
+                                    name="hoten"
                                     placeholder="Nhập họ và tên"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.hoten : null}
-                                    value={field.hoten}
+                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.hoten : hoten}
+                                    onChange={inputHoten}
+                                    // value={}
                                     readOnly={props.type === "view" ? true : false}
                                 />
                             </Form.Group>
@@ -112,29 +171,36 @@ const FormQLNhanVien = (props) => {
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control
                                     type="email"
+                                    name="email"
                                     placeholder="Nhập email"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.email : null}
-                                    value={field.email}
+                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.email : email}
+                                    onChange={inputEmail}
+                                    // value={field.email}
                                     readOnly={props.type === "view" ? true : false}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Giới tính</Form.Label>
                                 <Form.Select aria-label="Default select example"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.gioitinh : null}
-                                    value={field.gioitinh}>
+                                    name="gioitinh"
+                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.gioitinh : gioitinh}
+                                    // value={field.gioitinh}
+                                    onChange={inputGioitinh}
+                                >
                                     <option value="-1">Chọn giới tính</option>
-                                    <option value="1">Nam</option>
-                                    <option value="0">Nữ</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Ngày sinh</Form.Label>
                                 <Form.Control
                                     type={props.type === "create" ? "date" : "text"}
+                                    name="ngaysinh"
                                     placeholder="Nhập ngày sinh"
-                                    defaultValue={props.type === "create" ? null : Moment(props.type === "edit" || props.type === "view" ? props.value.ngaysinh : null).format('DD/MM/YYYY')}
-                                    value={field.ngaysinh}
+                                    defaultValue={props.type === "create" ? ngaysinh : Moment(props.type === "edit" || props.type === "view" ? props.value.ngaysinh : null).format('DD/MM/YYYY')}
+                                    onChange={inputNgaysinh}
+                                    // value={field.ngaysinh}
                                     readOnly={props.type === "view" ? true : false}
                                 />
                             </Form.Group>
@@ -142,9 +208,11 @@ const FormQLNhanVien = (props) => {
                                 <Form.Label>Số điện thoại</Form.Label>
                                 <Form.Control
                                     type="number"
+                                    name="sdt"
                                     placeholder="Nhập số điện thoại"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.sdt : null}
-                                    value={field.sdt}
+                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.sdt : sdt}
+                                    onChange={inputSdt}
+                                    // value={field.sdt}
                                     readOnly={props.type === "view" ? true : false}
                                 />
                             </Form.Group>
@@ -152,10 +220,12 @@ const FormQLNhanVien = (props) => {
                                 <Form.Label>Địa chỉ</Form.Label>
                                 <Form.Control
                                     as="textarea"
+                                    name="diachi"
                                     placeholder="Nhập địa chỉ"
                                     rows={2}
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.diachi : null}
-                                    value={field.diachi}
+                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.diachi : diachi}
+                                    onChange={inputDiachi}
+                                    // value={field.diachi}
                                     readOnly={props.type === "view" ? true : false}
                                 />
                             </Form.Group>
@@ -163,9 +233,11 @@ const FormQLNhanVien = (props) => {
                                 <Form.Label>Ngày vào làm</Form.Label>
                                 <Form.Control
                                     type={props.type === "create" ? "date" : "text"}
+                                    name="ngayvaolam"
                                     placeholder="Nhập ngày vào làm"
-                                    defaultValue={props.type === "create" ? null : Moment(props.type === "edit" || props.type === "view" ? props.value.ngayvaolam : null).format('DD/MM/YYYY')}
-                                    value={field.ngayvaolam}
+                                    defaultValue={props.type === "create" ? null : Moment(props.type === "edit" || props.type === "view" ? props.value.ngayvaolam : ngayvaolam).format('DD/MM/YYYY')}
+                                    onChange={inputNgayvaolam}
+                                    // value={field.ngayvaolam}
                                     readOnly={props.type === "view" ? true : false}
                                 />
                             </Form.Group>
@@ -173,10 +245,12 @@ const FormQLNhanVien = (props) => {
                                 <Form.Label>Lương</Form.Label>
                                 <Form.Control
                                     type="text"
+                                    name="luong"
                                     placeholder="Nhập lương"
                                     // new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value.luong)
-                                    defaultValue={props.type === "edit" ? props.value.luong : props.type === "view" ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(props.value.luong) : null}
-                                    value={field.luong}
+                                    defaultValue={props.type === "edit" ? props.value.luong : props.type === "view" ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(props.value.luong) : luong}
+                                    onChange={inputLuong}
+                                    // value={field.luong}
                                     readOnly={props.type === "view" ? true : false}
                                 />
                             </Form.Group>
@@ -197,12 +271,9 @@ const FormQLNhanVien = (props) => {
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>Đóng</Button>
                         {props.type === "edit" || props.type === "create"
-                            ? <Button variant="primary" onClick={saveNV}>Lưu</Button>
+                            ? <Button variant="primary" onClick={saveNV}>Lưu</Button>//
                             : null
                         }
-                        {/* <Button variant="primary" onClick={handleClose}>
-                        Lưu
-                    </Button> */}
                     </Modal.Footer>
                 </Modal>}
         </>

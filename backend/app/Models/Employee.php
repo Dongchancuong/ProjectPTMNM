@@ -23,4 +23,6 @@ class Employee extends Model
         'created_at',
         'updated_at'
     ];
+    protected $primaryKey = 'idnhanvien';
+    public $incrementing = false;
 }

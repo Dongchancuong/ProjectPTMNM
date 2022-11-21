@@ -6,7 +6,7 @@ import Moment from 'moment';//format tiền VNĐ
 import FormQLNhanVien from '../form/FormQLNhanVien'
 import FormQLKhachHang from '../form/FormQLKhachHang';
 
-const ButtonCreate = ({ type }) => {
+const ButtonCreate = ({ type, lastid, idtaikhoan }) => {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
 
@@ -21,7 +21,7 @@ const ButtonCreate = ({ type }) => {
                                     : null}
             </Button>
 
-            {type === "qlnhanvien" ? <FormQLNhanVien type={"create"} show={show} setshow={setShow} />
+            {type === "qlnhanvien" ? <FormQLNhanVien type={"create"} show={show} setshow={setShow} lastid={lastid} idtaikhoan={idtaikhoan}/>
                 : type === "qlkhachhang" ? <FormQLKhachHang type={"create"} show={show} setshow={setShow} />
                     : null}
             {/* <Modal show={show} onHide={handleClose}>

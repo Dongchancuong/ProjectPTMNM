@@ -46,7 +46,7 @@ function App() {
             <Route exact path='/qltaikhoan' element={<QLTaiKhoan title={"Quản lý tài khoản"} type="qltaikhoan" />} />
             <Route exact path='/qlnhanvien' element={<QLNhanVien title={"Quản lý nhân viên"} type="qlnhanvien" />} />
             <Route exact path='/qlkhachhang' element={<QLKhachHang title={"Quản lý khách hàng"} type="qlkhachhang" />} />
-            <Route exact path='/qlhoadon' element={<QLHoaDon title={"Quản lý hóa đơn"} type="qlhoadon"/>} />
+            <Route exact path='/qlhoadon' element={<QLHoaDon title={"Quản lý hóa đơn"} type="qlhoadon" />} />
             <Route exact path='/qlphieudathang' element={<QLPhieuDatHang title={"Quản lý phiếu đặt hàng"} />} />
             <Route exact path='/qlphieunhaphang' element={<QLPhieuNhapHang title={"Quản lý phiếu nhập hàng"} />} />
             <Route exact path='/qlchuongtrinhkhuyenmai' element={<QLCTKhuyenMai title={"Quản lý chương trình khuyến mãi"} />} />

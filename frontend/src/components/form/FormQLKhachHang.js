@@ -5,9 +5,6 @@ import Modal from 'react-bootstrap/Modal';
 import Moment from 'moment';//format tiền VNĐ
 
 const FormQLKhachHang = (props) => {
-
-    console.log(props)
-
     const handleClose = () => props.setshow(false)
 
     return (
