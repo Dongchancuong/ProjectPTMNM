@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
-import Moment from 'moment';//format tiền VNĐ
 import FormQLNhanVien from '../form/FormQLNhanVien';
 import FormQLKhachHang from '../form/FormQLKhachHang';
 
-const ButtonView = ({ value, type }) => {
+const ButtonView = ({ value, type, idtaikhoan }) => {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
 
@@ -15,7 +12,7 @@ const ButtonView = ({ value, type }) => {
             <Button variant="secondary" onClick={handleShow}>
                 Xem
             </Button>
-            {type === "qlnhanvien" ? <FormQLNhanVien value={value} type={"view"} show={show} setshow={setShow} />
+            {type === "qlnhanvien" ? <FormQLNhanVien value={value} type={"view"} show={show} setshow={setShow} idtaikhoan={idtaikhoan} />
                 : type === "qlkhachhang" ? <FormQLKhachHang value={value} type={"view"} show={show} setshow={setShow} />
                     : null}
             {/* <Modal show={show} onHide={handleClose}>

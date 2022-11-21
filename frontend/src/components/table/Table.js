@@ -34,8 +34,8 @@ class Table extends React.Component {
     handleEventButton = (cell, row, rowIndex) => {
         return (
             <>
-                <ButtonView value={this.state.list[rowIndex]} type={this.props.type} />
-                <ButtonEdit value={this.state.list[rowIndex]} type={this.props.type} />
+                {this.props.type === "qltaikhoan" ? null : <ButtonView value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.listTK} />}
+                <ButtonEdit value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.listTK} />
                 <ButtonDelete value={row} type={this.props.type} />
             </>
         )
@@ -106,7 +106,9 @@ class Table extends React.Component {
             dataField: 'matkhau',
             text: 'Mật khẩu'
         },
-
+        {
+            formatter: this.handleEventButton
+        }
     ]
     columnNV = [//Title của table Nhân Viên
         {

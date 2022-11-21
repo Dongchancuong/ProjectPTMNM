@@ -44,13 +44,12 @@ const FormQLKhachHang = (props) => {
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                {/* Lưu ý nhớ tải dữ liệu tài khoản lên */}
                                 <Form.Label>ID Tài Khoản</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Chọn ID tài khoản"
                                     defaultValue={props.type === "edit" || props.type === "view" ? props.value.idtaikhoan : null}
-                                    readOnly={props.type === "view" ? true : false}
+                                    readOnly={props.type === "edit" || props.type === "view" ? true : false}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">

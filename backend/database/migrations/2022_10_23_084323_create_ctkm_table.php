@@ -18,10 +18,8 @@ return new class extends Migration
             $table->string('idkhuyenmai',20);
             $table->string('tenchuongtrinh',40);
             $table->integer('giamgia');
-            $table->text('mota');
             $table->date('ngaybatdau');
             $table->date('ngayketthuc');
-            $table->tinyInteger('on_off')->default(0);
             $table->tinyInteger('visible')->default(1);
             $table->primary('idkhuyenmai');
             $table->timestamps();

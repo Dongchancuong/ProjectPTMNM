@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sanpham', function (Blueprint $table) {
             $table->string('idsanpham',30);
-            $table->string('idkhuyenmai',10)->nullable();
+            $table->string('idkhuyenmai',20)->nullable();
             $table->string('idnhacungcap',10);
             $table->string('tensanpham',100);
             $table->integer('soluong'); 

@@ -17,9 +17,9 @@ DB::table('khachhang')->insert([
     'email' => 'dvnam229@gmail.com', 'tichluy' => 89024000, 'capdo' => 2, 'created_at' => date("Y-m-d H:i:s")],
     ['idkhachhang' => 'KH03', 'idtaikhoan' => 'TK_KH03', 'hoten' => 'Võ Trung Kiệt', 'sdt' => '0911915725', 'diachi' => '723 Nguyễn Thị Minh Khai', 
     'email' => 'kiettt3z@gmail.com', 'tichluy' => 120946000, 'capdo' => 3, 'created_at' => date("Y-m-d H:i:s")],
-    ['idkhachhang' => 'KH04', 'idtaikhoan' => null, 'hoten' => 'Lê Duy', 'sdt' => '0929397633', 'diachi' => '234 Hồ Xuân Hương', 
+    ['idkhachhang' => 'KH04', 'idtaikhoan' => 'TK_KH04', 'hoten' => 'Lê Duy', 'sdt' => '0929397633', 'diachi' => '234 Hồ Xuân Hương', 
     'email' => 'duyl29@gmail.com', 'tichluy' => 12400000, 'capdo' => 1, 'created_at' => date("Y-m-d H:i:s")],
-    ['idkhachhang' => 'KH05', 'idtaikhoan' => null, 'hoten' => 'Nguyệt Lan', 'sdt' => '0813179722', 'diachi' => '373 Tôn Đức Thắng', 
+    ['idkhachhang' => 'KH05', 'idtaikhoan' => 'TK_KH05', 'hoten' => 'Nguyệt Lan', 'sdt' => '0813179722', 'diachi' => '373 Tôn Đức Thắng', 
     'email' => 'lann352@gmail.com', 'tichluy' => 4095000, 'capdo' => 1, 'created_at' => date("Y-m-d H:i:s")],
 ]);
 }

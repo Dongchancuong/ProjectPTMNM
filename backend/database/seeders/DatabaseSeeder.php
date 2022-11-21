@@ -25,9 +25,9 @@ class DatabaseSeeder extends Seeder
         $this->call(nhanvien::class);
         $this->call(khachhang::class);
         $this->call(nhacungcap::class);
+        $this->call(ctkm::class);
         $this->call(sanpham::class);
         $this->call(chitiet_sanpham::class);
-        $this->call(ctkm::class);
         $this->call(pnh::class);
         $this->call(chitiet_pnh::class);
         $this->call(hoadon::class);

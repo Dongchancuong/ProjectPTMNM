@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const FormQLNhanVien = (props) => {
 
-    console.log(props.idtaikhoan)
+    console.log("ID tai khoan: ", props.idtaikhoan)
 
     const [idnhanvien, setIdnhanvien] = useState(props.lastid)
     const [idtaikhoan, setIdtaikhoan] = useState(null)
@@ -58,7 +58,7 @@ const FormQLNhanVien = (props) => {
         }
     }
 
-    const inputIdtakhoan = (e) => {
+    const inputIdtaikhoan = (e) => {
         e.preventDefault()
         setIdtaikhoan(e.target.value)
         console.log(idtaikhoan)
@@ -143,17 +143,19 @@ const FormQLNhanVien = (props) => {
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                {/* Lưu ý nhớ tải dữ liệu tài khoản lên */}
                                 <Form.Label>ID Tài Khoản</Form.Label>
-                                <Form.Control
-                                    type="text"
+                                <Form.Select aria-label="Default select example"
                                     name="idtaikhoan"
-                                    placeholder="Chọn ID tài khoản"
-                                    defaultValue={props.type === "edit" || props.type === "view" ? props.value.idtaikhoan : idtaikhoan}
-                                    onChange={inputIdtakhoan}
-                                    // value={field.idtaikhoan}
-                                    readOnly={props.type === "view" ? true : false}
-                                />
+                                    value={props.type === "edit" || props.type === "view" ? props.value.idtaikhoan : idtaikhoan}
+                                    onChange={inputIdtaikhoan}
+                                >
+                                    <option value="-1">Chọn ID Tài Khoản</option>
+                                    {/* {console.log("Idtaikhoan: ", props.idtaikhoan)} */}
+                                    {props.idtaikhoan ? props.idtaikhoan.map((item, index) =>
+                                        <option key={index} value={item.idtaikhoan}>{item.idtaikhoan}</option>
+                                    ) : null}
+
+                                </Form.Select>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Họ và tên</Form.Label>
@@ -163,7 +165,6 @@ const FormQLNhanVien = (props) => {
                                     placeholder="Nhập họ và tên"
                                     defaultValue={props.type === "edit" || props.type === "view" ? props.value.hoten : hoten}
                                     onChange={inputHoten}
-                                    // value={}
                                     readOnly={props.type === "view" ? true : false}
                                 />
                             </Form.Group>
