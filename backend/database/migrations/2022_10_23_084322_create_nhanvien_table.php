@@ -32,7 +32,7 @@ return new class extends Migration
             $table->dropPrimary(); 
             /* add new primary key */
             $table->primary(['idnhanvien', 'STT']);
-            $table->foreign('idtaikhoan')->references('idtaikhoan')->on('taikhoan');
+            $table->foreign('idtaikhoan')->references('idtaikhoan')->on('users');
             $table->timestamps();
         });
     }

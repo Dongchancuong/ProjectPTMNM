@@ -34,6 +34,13 @@ class SupplierController extends Controller
     {
         //Cập nhập danh sách
         $input = $request->all(); 
+        if(Supplier::find($request->idnhacungcap)){
+            $arr = [
+                'status' => false,
+                'message'=>"Mã nhà cung cấp này đã tồn tại",
+            ];
+            return response()->json($arr, 400);
+        }
         $supplier= Supplier::create($input);
         $arr = [
             'status' => true,

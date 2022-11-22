@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -32,19 +33,19 @@ Route::group(['middleware'=>'api'], function () {
 });
 
 //Quản lý tài khoản
-use App\Http\Controllers\AccountController;
-Route::get('tk', [AccountController::class, 'index']);
-Route::post('tk/add', [AccountController::class, 'store'])->name("newAccount");
-Route::delete('tk/update', [AccountController::class, 'store']);
-Route::delete('tk/delete/{idtaikhoan}', [AccountController::class, 'destroy']);
-Route::get('tk/newaccount', [AccountController::class, 'newAccount']);
+use App\Http\Controllers\UserController;
+Route::get('tk', [UserController::class, 'index']);
+Route::get('tk/newaccount', [UserController::class, 'newUser']);
+Route::post('tk/add', [UserController::class, 'store']);
+Route::put('tk/update', [UserController::class, 'update']);
+Route::delete('tk/delete/{idtaikhoan}', [UserController::class, 'destroy']);
 
 //Quản lý nhân viên
 use App\Http\Controllers\EmployeeController;
 Route::get('nv', [EmployeeController::class, 'index']);
 Route::post('nv/add', [EmployeeController::class, 'store']);
 Route::put('nv/update', [EmployeeController::class, 'update']);
-Route::get('nv/getnewid', [EmployeeController::class, 'getnewid']);
+Route::get('nv/getnewid', [EmployeeController::class, 'getNewID']);
 Route::delete('nv/delete/{idnhanvien}', [EmployeeController::class, 'destroy']);
 
 //Quản lý khách hàng
@@ -65,10 +66,13 @@ Route::get('cv', [PositionController::class, 'index']);
 Route::post('cv/add', [PositionController::class, 'store']);
 Route::put('cv/update', [PositionController::class, 'update']);
 Route::delete('cv/delete/{idchucvu}', [PositionController::class, 'destroy']);
-
 //chi tiết chức vụ
 use App\Http\Controllers\PositionDetailController;
 Route::get('cv/{idchucvu}', [PositionDetailController::class, 'index']);
+
+//Thể loại
+use App\Http\Controllers\CategoryController;
+Route::get('theloai/{tentheloai}/{giatri}', [CategoryController::class, 'show']);
 
 
 //Route chương trình khuyến mãi 
@@ -82,9 +86,12 @@ Route::delete('ctkm/delete/{idkhuyenmai}', [PromotionController::class,'Hide']);
 use App\Http\Controllers\ProductController;
 Route::get('sp', [ProductController::class, 'index']);
 Route::post('sp/add', [ProductController::class, 'store']);
-Route::get('sp/{id}', [ProductController::class, 'show']);
 Route::put('sp/update/{id}', [ProductController::class, 'update']);
 Route::delete('sp/hide/{id}', [ProductController::class, 'Hide']);
+
+//Chi tiết sản phẩm
+use App\Http\Controllers\ProductDetailController;
+Route::get('sp/{id}', [ProductDetailController::class, 'show']);
 
 //Quản lý nhà cung cấp
 use App\Http\Controllers\SupplierController;
@@ -133,4 +140,6 @@ Route::get('home',[HomeController::class,'ListProduct']);
 Route::get('Category',[HomeController::class,'Category']);
 Route::get('/search/sp/{tensanpham}', [HomeController::class, 'searchbyname']);
 Route::get('/search/th/{tenthuonghieu}', [HomeController::class, 'searchbytrademask']);
-Route::get('/showdetail/{idsanpham}', [HomeController::class, 'showdetail']);
+
+//Giỏ hàng
+Route::get('cart/{id}',[CartController::class,'viewcart']);

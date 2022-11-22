@@ -18,8 +18,6 @@ class ReceivingVoucherDetail extends JsonResource
             'idpnh'            => $this -> idpnh,
             'idsanpham'        => $this -> idsanpham,
             'soluong'          => $this -> soluong,
-            'created_at'       => $this -> created_at,
-            'updated_at'       => $this -> updated_at,
             ];
     }
 }

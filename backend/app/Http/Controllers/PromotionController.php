@@ -37,6 +37,13 @@ class PromotionController extends Controller
     {
         //Thêm khuyến mãi 
         $input = $request->all();
+        if(Promotion::find($request->idkhuyenmai)){
+            $arr = [
+                'status' => false,
+                'message'=>"Mã khuyến mãi này đã tồn tại",
+            ];
+            return response()->json($arr, 400);
+        }
         $promotion = Promotion::create($input);
         $arr = [
             'status' => true,

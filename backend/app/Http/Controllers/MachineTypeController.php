@@ -35,6 +35,13 @@ class MachineTypeController extends Controller
     {
         //
         $input = $request->all(); 
+        if(MachineType::find($request->idloaimay)){
+            $arr = [
+                'status' => false,
+                'message'=>"Mã loại máy đã tồn tại",
+            ];
+            return response()->json($arr, 400);
+        }
         MachineType::create($input);
         $arr = [
             'status' => true,

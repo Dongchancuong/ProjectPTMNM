@@ -30,6 +30,13 @@ class HomeController extends Controller
             ];
             return Response()->json($arr,200);
         }
+        else {
+            $arr=[
+                'success'=>false,
+                'message'=>'Không có sản phẩm nào',
+            ];
+            return Response()->json($arr,404);
+        }
     }
     public function searchbytrademask($thuonghieu){
         $input =Trademark::with('ProductDetail')->where('tenthuonghieu','LIKE','%'.$thuonghieu.'%')->get();
@@ -45,10 +52,9 @@ class HomeController extends Controller
             $arr=[
             'success'=>false,
             'message'=>'Không có sản phẩm nào',
-            'data'=>$input
         ];
         }       
-        return Response()->json($arr,400);
+        return Response()->json($arr,404);
     }
     public function searchbymaterial($chatlieu){
         $input =Material::with('ProductDetail')->where('tenthuonghieu','LIKE','%'.$chatlieu.'%')->get();
@@ -64,10 +70,9 @@ class HomeController extends Controller
             $arr=[
             'success'=>false,
             'message'=>'Không có sản phẩm nào',
-            'data'=>$input
         ];
         }       
-        return Response()->json($arr,400);
+        return Response()->json($arr,404);
     }
     public function searchbymachinetype($loaimay){
         $input =MachineType::with('ProductDetail')->where('tenthuonghieu','LIKE','%'.$loaimay.'%')->get();
@@ -86,28 +91,7 @@ class HomeController extends Controller
             'data'=>$input
         ];
         }       
-        return Response()->json($arr,400);
+        return Response()->json($arr,404);
     }
     
-    public function showdetail($id){
-        $product=Product::with('ProductDetail')->find($id);
-        $idthuonghieu=$product->ProductDetail->idthuonghieu;
-        $idmau=$product->ProductDetail->idmau;
-        $idchatlieu=$product->ProductDetail->idchatlieu;
-        $idloaimay=$product->ProductDetail->idloaimay;
-        $trademask=Trademark::find($idthuonghieu)->tenthuonghieu;
-        $color=Color::find($idmau)->tenmau;
-        $machinetype=MachineType::find($idloaimay)->tenloaimay;
-        $material=Material::find($idchatlieu)->tenchatlieu;
-        $arr = [
-            'status' => true,
-            'message' => 'Thông tin chi tiết sản phẩm',
-            'data'=>$product,
-            'color'=>$color,
-            'trademask'=>$trademask,
-            'machinetype'=>$machinetype,
-            'material'=>$material,
-         ];
-        return response()->json($arr, 200);
-    }
 }

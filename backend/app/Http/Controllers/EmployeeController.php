@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Employee;
+use App\Models\User;
 use App\Http\Resources\Employee as EmployeeResource;
 
 
@@ -60,7 +61,17 @@ class EmployeeController extends Controller
            ];
            return response()->json($arr, 200);
         }
-        $employee = Employee::create($input);
+        try{
+          $employee = Employee::create($input);
+        } catch (QueryException $exception) {
+            (new UserController)->destroy($request['idtaikhoan']);
+            $arr = [
+                'success' => false,
+                'message' => 'Lỗi!!!',
+                'data' => []
+            ];
+            return response()->json($arr, 200);
+        }
         $arr = ['status' => true,
            'message'=>"Thêm nhân viên thành công",
            'data'=> new EmployeeResource($employee)
@@ -92,7 +103,13 @@ class EmployeeController extends Controller
            return response()->json($arr, 200);
         }
         $employee = Employee::find($input['idnhanvien']);
-        if (!is_null($input['idtaikhoan'])) 
+        if (!is_null($input['idtaikhoan'])) {
+          if ($employee->idtaikhoan != $input['idtaikhoan']) 
+              User::where('idtaikhoan', $employee->idtaikhoan)
+              ->update(['email' => null]);
+              User::where('idtaikhoan', $input['idtaikhoan'])
+              ->update(['email' => $input['email']]);
+        }
         $employee->idtaikhoan = $input['idtaikhoan'];
         $employee->hoten = $input['hoten'];
         $employee->gioitinh = $input['gioitinh'];
@@ -127,6 +144,8 @@ class EmployeeController extends Controller
         //   return response()->json($arr, 200);
         // }
         $employee = Employee::find($idnhanvien);
+        User::where('idtaikhoan', $employee->idtaikhoan)
+        ->update(['email' => null]);
         $employee->idtaikhoan = null;
         $employee->visible = 0;
         $employee->save();

@@ -9,7 +9,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // \App\Models\User::factory()->create([
+       // \App\Models\User::factory(10)->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
@@ -32,5 +32,6 @@ class DatabaseSeeder extends Seeder
         $this->call(chitiet_pnh::class);
         $this->call(hoadon::class);
         $this->call(chitiet_hd::class);
+        $this->call(giohang::class);
     }
 }

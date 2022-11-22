@@ -33,12 +33,19 @@ class ColorController extends Controller
      */
     public function store(ColorRequest $request)
     {
-        //
         $input = $request->all(); 
+        if(Color::find($request->idmau)){
+            $arr = [
+            'status' => false,
+            'message'=>"Đã Có mã màu này trong danh sách",
+         ];
+         return response()->json($arr, 400); 
+        }
         $color = Color::create($input);
-        $arr = ['status' => true,
-           'message'=>"Màu sắc được thêm thành công",
-           'data'=> new ColorResource($color)
+        $arr = [
+            'status' => true,
+            'message'=>"Màu sắc được thêm thành công",
+            'data'=> new ColorResource($color)
         ];
         return response()->json($arr, 201);
     }

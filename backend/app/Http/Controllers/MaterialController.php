@@ -34,6 +34,13 @@ class MaterialController extends Controller
     {
         //
         $input = $request->all(); 
+        if(Material::find($request->idchatlieu)){
+            $arr = [
+                'status' => false,
+                'message'=>"Mã chất liệu này đã tồn tại",
+            ];
+            return response()->json($arr, 400);
+        }
         $material = Material::create($input);
         $arr = ['status' => true,
            'message'=>"Chất liệu được thêm thành công",

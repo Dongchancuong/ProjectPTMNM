@@ -34,6 +34,13 @@ class TrademarkController extends Controller
     public function store(Request $request)
     {
         $input = $request->all(); 
+        if(Trademark::find($request->idthuonghieu)){
+            $arr = [
+                'status' => false,
+                'message'=>"Mã thương hiệu này đã tồn tại",
+            ];
+            return response()->json($arr, 400);
+        }
         $trademark = Trademark::create($input);
         $arr = [
             'status' => true,

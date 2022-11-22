@@ -74,22 +74,22 @@ class PositionController extends Controller
         return response()->json($arr, 200);
     }
 
-    public function destroy($idchucvu)
+    public function destroy(Request $request)
     {   
-        // $input = $request->all();
-        // $validator = Validator::make($input, [
-        //     'idchucvu' => 'required',
-        // ]);
-        // if($validator->fails()){
-        //    $arr = [
-        //      'success' => false,
-        //      'message' => 'Lỗi kiểm tra dữ liệu',
-        //      'data' => $validator->errors()
-        //    ];
-        //    return response()->json($arr, 200);
-        // }
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'idchucvu' => 'required',
+        ]);
+        if($validator->fails()){
+           $arr = [
+             'success' => false,
+             'message' => 'Lỗi kiểm tra dữ liệu',
+             'data' => $validator->errors()
+           ];
+           return response()->json($arr, 200);
+        }
 
-        if ($idchucvu === 'QL') {
+        if ($input['idchucvu'] === 'QL') {
             $arr = [
                 'status' => false,
                 'message' => 'Không được xóa chức vụ này',
@@ -98,14 +98,14 @@ class PositionController extends Controller
             return response()->json($arr, 200);
         }
 
-        $query = Account::select('idchucvu')->where('idchucvu', '=', $idchucvu)->get();
+        $query = Account::select('idchucvu')->where('idchucvu', '=', $input['idchucvu'])->get();
         if (!empty($query[0]->idchucvu)) {
             $status = false;
             $message = 'Chức vụ đang được sử dụng';
         }
         else {
-            (new PositionDetailController)->destroy($idchucvu);
-            Position::where('idchucvu', $idchucvu)->delete();
+            (new PositionDetailController)->destroy($request['idchucvu']);
+            Position::where('idchucvu', $request['idchucvu'])->delete();
             $status = true;
             $message = 'Chức vụ đã được xóa';
         }

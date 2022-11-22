@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Account;
+use Illuminate\Http\Request;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -23,24 +26,57 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['username', 'password']);
+        //check NV hay KH
+        $accType = DB::table('users')->select('idchucvu')->where('username', $request['username'])->get();
+        if ($request['page'] === "admin") {
+            if ($accType[0]->idchucvu === "KH") {
+                $arr = [
+                    'status' => false,
+                    'message' => 'Tài khoản không tồn tại trên trang Admin',
+                    'data' => []
+                ];
+                return response()->json($arr, 401);
+            }
+        } else {
+            if (!($accType[0]->idchucvu === "KH")) {
+                $arr = [
+                    'status' => false,
+                    'message' => 'Tài khoản không tồn tại trên trang Người dùng',
+                    'data' => []
+                ];
+                return response()->json($arr, 401);
+            }
+        }
 
-        if (! $token = auth()->attempt($credentials)) {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 401);
+        }
+
+        $credentials = [
+            'username' => $request['username'],
+            'password' => $request['password']
+        ];
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         return $this->respondWithToken($token);
     }
 
-    public function register()
+    public function register(Request $request)
     {
         $credentials = request(['email', 'username', 'password']);
         $credentials['password'] = bcrypt($credentials['password']);
-        Account::create($credentials);
+        User::create($credentials);
 
-        return response()->json('success');
+        return response()->json('Đăng ký thành công');
     }
 
     /**
@@ -50,7 +86,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->account());
+        return response()->json(auth()->user());
     }
 
     /**
@@ -62,7 +98,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'Đăng xuất thành công']);
     }
 
     /**
@@ -88,7 +124,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'account' => auth()->account()
+            'user' => auth()->user()
         ]);
     }
 }

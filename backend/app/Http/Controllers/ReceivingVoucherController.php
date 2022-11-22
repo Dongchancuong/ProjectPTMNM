@@ -6,7 +6,6 @@ use App\Models\ReceivingVoucher;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RecevivingVoucherRequest;
 use App\Http\Resources\ReceivingVoucher as ResourceRE;
-use App\Http\Resources\ReceivingVoucherDetail as ResourceREDetail;
 use App\Models\Product;
 use App\Models\ReceivingVoucherDetail;
 
@@ -52,8 +51,6 @@ class ReceivingVoucherController extends Controller
         ];
             return response()->json($arr, 200);
     }
-
-    
     /**
      * Store a newly created resource in storage.
      *
@@ -63,10 +60,10 @@ class ReceivingVoucherController extends Controller
     public function store(RecevivingVoucherRequest $request)
     {
         $re=$request->all();
-        if(!(ReceivingVoucher::find($request->idpn))){
+        if(ReceivingVoucher::find($request->idpn)){
             $arr = [
-                'status' => true,
-                'message'=>"Mã nhập hàng đã tồn tại",
+                'status' => false,
+                'message'=>"Mã nhập hàng này đã tồn tại",
             ];
             return response()->json($arr, 400);
         }
@@ -79,13 +76,18 @@ class ReceivingVoucherController extends Controller
         $redetail['soluong']=$request->soluong;
         ReceivingVoucherDetail::create($redetail);
         $product=Product::find($request->idsanpham);
+        if(!$product){
+            $arr = [
+                'status' => false,
+                'message'=>"Không có mã sản phẩm này",
+            ];
+            return response()->json($arr, 400);
+        }
         $product->soluong+=$request->soluong;
         $product->save();
         $arr = [
             'status' => true,
             'message'=>"Đã thêm phiếu nhập hàng thành công",
-            'data'=> new ResourceRE($re) ,
-            'datadetail'=> new ResourceREDetail($redetail)
         ];
         return response()->json($arr, 201);
     }

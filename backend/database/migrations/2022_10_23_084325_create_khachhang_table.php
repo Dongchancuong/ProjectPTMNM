@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('diachi');
             $table->string('email',40);
             $table->bigInteger('tichluy');
-            $table->integer('capdo');
+            $table->integer('capdo')->default(1);
             $table->tinyInteger('visible')->default(1);
             /* create an index for the autoincrement column */
             $table->unique('STT');  
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->dropPrimary(); 
             /* add new primary key */
             $table->primary(['idkhachhang', 'STT']);
-            $table->foreign('idtaikhoan')->references('idtaikhoan')->on('taikhoan');
+            $table->foreign('idtaikhoan')->references('idtaikhoan')->on('users');
             $table->timestamps();
         });
     }

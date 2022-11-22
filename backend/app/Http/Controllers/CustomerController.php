@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\AccountController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\Customer;
+use App\Models\User;
 use App\Http\Resources\Customer as CustomerResource;
 
 
@@ -28,7 +29,7 @@ class CustomerController extends Controller
     {
         $last_id = Customer::select('idkhachhang')->orderBy('idkhachhang', 'DESC')->first();
         $split_id = str_split($last_id['idkhachhang'], 2);
-        $newid = $split_id['1'] + 1;
+        $newid = $split_id[1] + 1;
         if ($newid < 10) $idkh= "KH0".$newid;
         else $idkh = "KH".$newid;
         return $idkh;
@@ -37,8 +38,8 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $request['idkhachhang'] = $this->getNewID();
-        $result = json_decode((new AccountController)->store($request)->getContent(), true);
-        // $account = json_decode(Route::, true); //Goi bang router ?
+        $result = json_decode((new UserController)->store($request)->getContent(), true); //getContent will return the form data in string format.
+        // $user = json_decode(Route::, true); //Goi bang router ?
         $request['idtaikhoan'] = $result['data']['idtaikhoan'];
         $input = $request->all(); 
         $validator = Validator::make($input, [
@@ -47,11 +48,7 @@ class CustomerController extends Controller
             'hoten' => 'required',
             'sdt' => 'required',
             'diachi' => 'required',
-            'email' => 'required',
-            'tichly' => 'required',
-            'capdo' => 'required',
-            'tentaikhoan' => 'required',
-            'matkhau' => 'required'
+            'email' => 'required'
         ]);
         if($validator->fails()){
            $arr = [
@@ -64,8 +61,13 @@ class CustomerController extends Controller
         try{
             $customer = Customer::create($input);
         } catch (QueryException $exception) {
-            (new AccountController)->destroy($request['idtaikhoan']);
-            return false;
+            (new UserController)->destroy($request['idtaikhoan']);
+            $arr = [
+                'success' => false,
+                'message' => 'Lỗi!!!',
+                'data' => []
+            ];
+            return response()->json($arr, 200);
         }
         $arr = ['status' => true,
            'message'=>"Thêm khách hàng thành công",
@@ -84,7 +86,7 @@ class CustomerController extends Controller
             'sdt' => 'required',
             'diachi' => 'required',
             'email' => 'required',
-            'tichly' => 'required',
+            'tichluy' => 'required',
             'capdo' => 'required',
         ]);
         if($validator->fails()){
@@ -96,12 +98,18 @@ class CustomerController extends Controller
            return response()->json($arr, 200);
         }
         $customer = Customer::find($input['idkhachhang']);
+        if ($customer->idtaikhoan != $input['idtaikhoan']) {
+            User::where('idtaikhoan', $customer->idtaikhoan)
+            ->update(['email' => null]);
+            User::where('idtaikhoan', $input['idtaikhoan'])
+            ->update(['email' => $input['email']]);
+        }
         $customer->idtaikhoan = $input['idtaikhoan'];
         $customer->hoten = $input['hoten'];
         $customer->sdt = $input['sdt'];
         $customer->diachi = $input['diachi'];
         $customer->email = $input['email'];
-        $customer->doanhso = $input['doanhso'];
+        $customer->tichluy = $input['tichluy'];
         $customer->capdo = $input['capdo'];
         $customer->save();
         $arr = [
@@ -127,6 +135,8 @@ class CustomerController extends Controller
         //    return response()->json($arr, 200);
         // }
         $customer = Customer::find($idkhachhang);
+        User::where('idtaikhoan', $customer->idtaikhoan)
+        ->update(['email' => null]);
         $customer->idtaikhoan = null;
         $customer->visible = 0;
         $customer->save();

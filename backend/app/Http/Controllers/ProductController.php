@@ -33,6 +33,13 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
+        if(Product::find($request->idsanpham)){
+            $arr = [
+                'status' => false,
+                'message'=>"Mã sản phẩm đã tồn tại",
+            ];
+            return response()->json($arr, 400);
+        }
         $product = Product::create([
             'idsanpham'=>$request->idsanpham, 
             'idkhuyenmai'=>$request->idkhuyenmai,
@@ -45,12 +52,12 @@ class ProductController extends Controller
             $file=$request->anh;
             $extension=$file->getClientOriginalExtension();
             $filename=time().'-'.'product'.'.'.$extension;
-            $name=$file->move(public_path('upload'),$filename);
+            $name=$file->move(public_path('uploads'),$filename);
         }
         else{
-            unset($request['image']);
+            unset($request->anh);
         }
-        $product->ProductDetail()->create([
+        $productdetail=$product->ProductDetail()->create([
             'idsanpham'=>$request->idsanpham,
             'idthuonghieu'=>$request->idthuonghieu,
             'idmau'=>$request->idmau,
@@ -59,12 +66,13 @@ class ProductController extends Controller
             'gioitinh'=>$request->gioitinh,
             'xuatxu'=>$request->xuatxu,
             'mota'=>$request->mota,
-            'anh'=>$name,
+            'anh'=>$filename,
         ]);
         $arr = [
             'status' => true,
             'message'=>"Sản phẩm được thêm thành công",
-            'data'=> new ProductResource($product),
+            'data'=> $product,
+            'data'=> $productdetail,
         ];
         return response()->json($arr, 201);
     }
@@ -93,7 +101,7 @@ class ProductController extends Controller
             return response()->json($arr, 400);
         };
         if($request->file('anh')!=''){
-                $destination=public_path('upload').$product->file('anh');
+                $destination=public_path('upload').'/'.$product->file('anh');
                 if(File::exists($destination)){
                     File::delete($destination);
                 }
@@ -104,8 +112,8 @@ class ProductController extends Controller
                 $request->anh=$filename;
             }
         else{
-            unset($request->anh);
-         }
+            $request->anh=null;
+        }
         $product->ProductDetail()->update([
             'idthuonghieu'=>$request->idthuonghieu,
             'idmau'=>$request->idmau,
