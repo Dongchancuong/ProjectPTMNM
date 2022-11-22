@@ -7,9 +7,10 @@ export default function () {
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
 
-    const submitForm = () => {
+    const submitForm = (e) => {
+        e.preventDefault()
         //call api
-        http.post('/login',{username:username, password:password}).then((res) => {
+        http.post('/login',{username:username, password:password, page:"admin"}).then((res) => {
             setToken(res.data.user, res.data.access_token)
         })
     }

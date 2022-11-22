@@ -4,8 +4,16 @@ import { Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import * as MdIcons from 'react-icons/md';
+import AuthAPI from '../../views/admin/AuthAPI';
 
 const NavBar = ({ title }) => {
+    const { token, logout } = AuthAPI()
+    const logoutTaiKhoan = (e) => {
+        e.preventDefault()
+        if (token != undefined) {
+            logout()
+        }
+    }
     return (
         <div className="Nav-Bar-Admin">
             <span className='Nav-Bar-Title  fw-bold fs-5'>{title}</span>
@@ -18,7 +26,8 @@ const NavBar = ({ title }) => {
                     >
                         <NavDropdown.Item><Link to="/thongtintaikhoan">Thông tin tài khoản</Link></NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item href="/">
+                        <NavDropdown.Item
+                            onClick={logoutTaiKhoan}>
                             <div className='Sub-Icon'>
                                 <MdIcons.MdLogout className='Icon-Log-Out' />
                             </div>

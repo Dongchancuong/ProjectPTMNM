@@ -26,12 +26,12 @@ export default function AuthAPI() {
 
         setToken(token)
         setUser(user)
-        navigate('/dashboard')
+        navigate('/qlchucvu')
     }
 
     const logout = () => {
         sessionStorage.clear()
-        navigate('/login')
+        navigate('/')
     }
     const http = axios.create({
         baseURL: "http://localhost:8000/api",
