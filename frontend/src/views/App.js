@@ -29,7 +29,8 @@ function App() {
       <SideBar />
       <div className='content-container'>
         <Routes>
-          <Route path='/dashboard' element={<Dashboard title={"Dashboard"} />} />
+          {/* <Route path='/dashboard' element={<Dashboard title={"Dashboard"} />} /> */}
+          <Route path='/dangnhap' element={<AuthAdmin />} />
           <Route path='/qlchucvu' element={<QLChucVu title={"Quản lý chức vụ"} type="qlchucvu" />} />
           <Route path='/qlsanpham' element={<QLSanPham title={"Quản lý sản phẩm"} />} />
           <Route path='/qlsanpham/qlloaimay' element={<QLLoaiMay title={"Quản lý loại máy"} />} />
@@ -41,7 +42,7 @@ function App() {
           <Route path='/qlkhachhang' element={<QLKhachHang title={"Quản lý khách hàng"} type="qlkhachhang" />} />
           <Route path='/qlhoadon' element={<QLHoaDon title={"Quản lý hóa đơn"} type="qlhoadon" />} />
           <Route path='/qlphieunhaphang' element={<QLPhieuNhapHang title={"Quản lý phiếu nhập hàng"} />} />
-          <Route path='/qlchuongtrinhkhuyenmai' element={<QLCTKhuyenMai title={"Quản lý chương trình khuyến mãi"} />} />
+          <Route path='/qlchuongtrinhkhuyenmai' element={<QLCTKhuyenMai title={"Quản lý chương trình khuyến mãi"} type="qlctkm"/>} />
           <Route path='/qlnhacungcap' element={<QLNhaCungCap title={"Quản lý nhà cung cấp"} />} />
           <Route path='/thongtintaikhoan' element={<ThongTinTK />} />
           {/* <Route path='/AuthCustomer' element={<AuthCustomer />} /> */}

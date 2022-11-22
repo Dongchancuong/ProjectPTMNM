@@ -48,18 +48,21 @@ const FormQLNhanVien = (props) => {
     const saveCreateNV = async (e) => {
         e.preventDefault()
         setListNhanVien()
-        let res = await axios.post('http://localhost:8000/api/nv/add', listnv[0])
-        if (res.data.status === true) {
-            setIdtaikhoan(null)
-            setHoten(null)
-            setEmail(null)
-            setGioitinh(null)
-            setNgaysinh(null)
-            setSdt(null)
-            setDiachi(null)
-            setNgayvaolam(null)
-            setLuong(null)
-            handleClose()
+        if (listnv === undefined) { }
+        else {
+            let res = await axios.post('http://localhost:8000/api/nv/add', listnv[0])
+            if (res.data.status === true) {
+                setIdtaikhoan(null)
+                setHoten(null)
+                setEmail(null)
+                setGioitinh(null)
+                setNgaysinh(null)
+                setSdt(null)
+                setDiachi(null)
+                setNgayvaolam(null)
+                setLuong(null)
+                handleClose()
+            }
         }
     }
 

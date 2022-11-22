@@ -18,9 +18,9 @@ class UserController extends Controller
     {
         $users = User::all();
         $arr = [
-        'status' => true,
-        'message' => "Danh sách tài khoản",
-        'data'=>UserResource::collection($users)
+            'status' => true,
+            'message' => "Danh sách tài khoản",
+            'data' => UserResource::collection($users)
         ];
         return response()->json($arr, 200);
     }
@@ -31,9 +31,9 @@ class UserController extends Controller
         $cusAcc = Customer::select('idtaikhoan')->whereNotNull('idtaikhoan')->get();
         $users = User::whereNotIn('idtaikhoan', $empAcc)->whereNotIn('idtaikhoan', $cusAcc)->get();
         $arr = [
-        'status' => true,
-        'message' => "Danh sách tài khoản tài khoản chưa được sử dụng",
-        'data'=>UserResource::Collection($users)
+            'status' => true,
+            'message' => "Danh sách tài khoản tài khoản chưa được sử dụng",
+            'data' => UserResource::Collection($users)
         ];
         return response()->json($arr, 200);
     }
@@ -43,28 +43,28 @@ class UserController extends Controller
         $last_id = User::select('idtaikhoan')->orderBy('idtaikhoan', 'DESC')->first();
         $split_id = str_split($last_id['idtaikhoan'], 2);
         $newid = $split_id[1] + 1;
-        if ($newid < 10) $idtk = "TK0".$newid;
-        else $idtk = "TK".$newid;
+        if ($newid < 10) $idtk = "TK0" . $newid;
+        else $idtk = "TK" . $newid;
         return $idtk;
     }
 
     public function store(Request $request)
     {
         $request['idtaikhoan'] = $this->getNewID();
-        $input = $request->all(); 
+        $input = $request->all();
         $validator = Validator::make($input, [
             'idtaikhoan' => 'required',
             'idchucvu' => 'required',
             'username' => 'required',
             'password' => 'required'
         ]);
-        if($validator->fails()){
-           $arr = [
-             'success' => false,
-             'message' => 'Lỗi kiểm tra dữ liệu',
-             'data' => $validator->errors()
-           ];
-           return response()->json($arr, 200);
+        if ($validator->fails()) {
+            $arr = [
+                'success' => false,
+                'message' => 'Lỗi kiểm tra dữ liệu',
+                'data' => $validator->errors()
+            ];
+            return response()->json($arr, 200);
         }
 
         $query = User::where('username', '=', $request['username'])->get();
@@ -73,16 +73,16 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Tên tài khoản bị trùng',
                 'data' => []
-              ];
-              return response()->json($arr, 200);
+            ];
+            return response()->json($arr, 200);
         }
-        
+
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $arr = [
             'status' => true,
-            'message'=>"Thêm tài khoản thành công",
-            'data'=> new UserResource($user)
+            'message' => "Thêm tài khoản thành công",
+            'data' => new UserResource($user)
         ];
         return response()->json($arr, 201);
     }
@@ -93,31 +93,46 @@ class UserController extends Controller
         $validator = Validator::make($input, [
             'idtaikhoan' => 'required',
             'idchucvu' => 'required',
+            'username' => 'required',
+            'password' => 'required',
         ]);
-        if($validator->fails()){
-           $arr = [
-             'success' => false,
-             'message' => 'Lỗi kiểm tra dữ liệu',
-             'data' => $validator->errors()
-           ];
-           return response()->json($arr, 200);
+        if ($validator->fails()) {
+            $arr = [
+                'success' => false,
+                'message' => 'Lỗi kiểm tra dữ liệu',
+                'data' => $validator->errors()
+            ];
+            return response()->json($arr, 200);
         }
-        // $curAcc = User::select('idtaikhoan')->where('idtaikhoan', '=', auth()->user()->idtaikhoan)->get();
-        // if (!empty($curAcc)) {
-        //     $arr = [
-        //         'status' => false,
-        //         'message' => 'Tài khoản đang được sử dụng',
-        //         'data' => []
-        //     ];
-        //     return response()->json($arr, 200);
-        // } 
+        $curAcc = User::select('idtaikhoan')->where('idtaikhoan', '=', auth()->user()->idtaikhoan)->get();
+        if (!empty($curAcc)) {
+            $arr = [
+                'status' => false,
+                'message' => 'Tài khoản đang được sử dụng',
+                'data' => []
+            ];
+            return response()->json($arr, 200);
+        }
         $user = User::find($input['idtaikhoan']);
         $user->idchucvu = $input['idchucvu'];
+        if (!is_null($input['username'])) {
+            $query = User::where('username', '=', $request['username'])->get();
+            if (!empty($query[0]->username)) {
+                $arr = [
+                    'success' => false,
+                    'message' => 'Tên tài khoản bị trùng',
+                    'data' => []
+                ];
+                return response()->json($arr, 200);
+            }
+        }
+        $user->username = $input['username'];
+        $user->password = $input['password'];
         $user->save();
         $arr = [
-           'status' => true,
-           'message' => 'Sửa chức vụ thành công',
-           'data' => new UserResource($user)
+            'status' => true,
+            'message' => 'Sửa chức vụ thành công',
+            'data' => new UserResource($user)
         ];
         return response()->json($arr, 200);
     }
@@ -130,12 +145,11 @@ class UserController extends Controller
             $status = false;
             $message = 'Tài khoản đang được sử dụng';
         } else {
-            // $curAcc = User::select('idtaikhoan')->where('idtaikhoan', '=', auth()->user()->idtaikhoan)->get();
-            // if (!empty($curAcc)) {
-            //     $status = false;
-            //     $message = 'Tài khoản đang được sử dụng';
-            // } else 
-            {
+            $curAcc = User::select('idtaikhoan')->where('idtaikhoan', '=', auth()->user()->idtaikhoan)->get();
+            if (!empty($curAcc)) {
+                $status = false;
+                $message = 'Tài khoản đang được sử dụng';
+            } else {
                 User::find($idtaikhoan)->delete();
                 $status = true;
                 $message = 'Tài khoản đã được xóa';

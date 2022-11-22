@@ -1,11 +1,12 @@
 import React from 'react'
 import NavBarAdmin from '../../components/sidebar/NavBar'
+import Table from '../../components/table/Table';
 
-const QLCTKhuyenMai = ({ title }) => {
+const QLCTKhuyenMai = ({ title, type }) => {
     return (
         <div className='qlctkhuyenmai'>
             <NavBarAdmin title={title} />
-            <h1 className='daTitle'>Quản lý chương trình khuyến mãi</h1>
+            <Table type={type} />
         </div>
     );
 };

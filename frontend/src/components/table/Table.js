@@ -11,6 +11,7 @@ import ButtonView from "../button/ButtonView";
 import ButtonEdit from "../button/ButtonEdit"
 import ButtonDelete from "../button/ButtonDelete";
 import ButtonChucVu from "../button/ButtonChucVu";
+import Moment from 'moment';
 
 class Table extends React.Component {
     state = {
@@ -36,25 +37,22 @@ class Table extends React.Component {
         );
     }
 
+    ngayFormatter = (cell, row) => {
+        return (
+            <>{Moment(cell).format('DD/MM/YYYY')}</>
+        )
+    }
+
     handleEventButton = (cell, row, rowIndex) => {
         return (
             <>
                 {this.props.type === "qlchucvu" ? <ButtonChucVu></ButtonChucVu> : null}
-                {this.props.type === "qltaikhoan" || this.props.type === "qlchucvu" ? null : <ButtonView value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.tknewaccount} />}
+                {this.props.type === "qltaikhoan" || this.props.type === "qlchucvu" || this.props.type === "qlctkm" ? null : <ButtonView value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.tknewaccount} />}
                 {this.props.type === "qlchucvu" ? null : <ButtonEdit value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.listTK} idchucvu={this.state.listCV} />}
                 {this.props.type === "qlchucvu" ? null : <ButtonDelete value={row} type={this.props.type} />}
             </>
         )
     }
-
-    // handleEventButtonTaiKhoan = (cell, row, rowIndex) => {
-    //     return (
-    //         <>
-    //             <ButtonEdit value={row} type={this.props.type} idchucvu={this.state.listCV} />
-    //             <ButtonDelete value={row} type={this.props.type} />
-    //         </>
-    //     )
-    // }
 
     rowEvents = {
         onClick: (e, row, rowIndex) => {
@@ -259,7 +257,53 @@ class Table extends React.Component {
             })
         }
     ];
-
+    columnCTKM = [//Title của table Chương trình khuyến mãi
+        {
+            dataField: 'idkhuyenmai',
+            text: 'ID Khuyến Mãi',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm ID Khuyến Mãi'
+            })
+        },
+        {
+            dataField: 'tenchuongtrinh',
+            text: 'Tên Chương Trình',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm tên chương trình'
+            })
+        },
+        {
+            dataField: 'giamgia',
+            text: '% Giảm giá',
+            sort: true,
+            filter: textFilter({
+                placeholder: 'Tìm % giảm giá'
+            })
+        },
+        {
+            dataField: 'ngaybatdau',
+            text: 'Ngày Bắt Đầu',
+            sort: true,
+            formatter: this.ngayFormatter,
+            filter: textFilter({
+                placeholder: 'Tìm ngày bắt đầu'
+            })
+        },
+        {
+            dataField: 'ngayketthuc',
+            text: 'Ngày Kết Thúc',
+            sort: true,
+            formatter: this.ngayFormatter,
+            filter: textFilter({
+                placeholder: 'Tìm ngày kết thúc'
+            })
+        },
+        {
+            formatter: this.handleEventButton
+        }
+    ]
     defaultSorted = [{
         dataField: 'name',
         order: 'desc'//thứ tự từ cao đến thấp
@@ -272,7 +316,8 @@ class Table extends React.Component {
                     : this.props.type === "qlnhanvien" ? "http://localhost:8000/api/nv/"
                         : this.props.type === "qlkhachhang" ? "http://localhost:8000/api/kh/"
                             : this.props.type === "qlhoadon" ? "http://localhost:8000/api/hd/"
-                                : null
+                                : this.props.type === "qlctkm" ? "http://localhost:8000/api/ctkm/"
+                                    : null
         );
         let resCV = await axios.get("http://localhost:8000/api/cv")
         let resTK = await axios.get("http://localhost:8000/api/tk")
@@ -298,13 +343,14 @@ class Table extends React.Component {
                     hover
                     keyField="id"
                     // data={this.state.list}//dữ liệu
-                    data={this.state.list}//tiêu đề
+                    data={this.state.list}//dữ liệu
                     columns={this.props.type === "qlnhanvien" ? this.columnNV
                         : this.props.type === "qltaikhoan" ? this.columnTK
                             : this.props.type === "qlchucvu" ? this.columnCV
                                 : this.props.type === "qlkhachhang" ? this.columnKH
                                     : this.props.type === "qlhoadon" ? this.columnHD
-                                        : null}//tiêu đề
+                                        : this.props.type === "qlctkm" ? this.columnCTKM
+                                            : null}//tiêu đề
                     pagination={paginationFactory({ sizePerPage: 10 })}//có lỗi phân trang
                     defaultSorted={this.defaultSorted}
                     filter={filterFactory()}

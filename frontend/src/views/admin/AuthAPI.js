@@ -31,7 +31,7 @@ export default function AuthAPI() {
 
     const logout = () => {
         sessionStorage.clear()
-        navigate('/')
+        navigate('/dangnhap')
     }
     const http = axios.create({
         baseURL: "http://localhost:8000/api",

@@ -14,8 +14,8 @@ const FormQLTaiKhoan = (props) => {
     const [listtk, setListtk] = useState([{
         idtaikhoan: props.type === "edit" ? props.value.idtaikhoan : null,
         idchucvu: props.type === "edit" ? props.value.idchucvu : null,
-        tentaikhoan: props.type === "edit" ? props.value.tentaikhoan : null,
-        matkhau: props.type === "edit" ? props.value.matkhau : null
+        username: props.type === "edit" ? props.value.tentaikhoan : null,
+        password: props.type === "edit" ? props.value.matkhau : null
     }])
 
     const handleClose = () => props.setshow(false)
@@ -23,8 +23,8 @@ const FormQLTaiKhoan = (props) => {
     const setListTaiKhoan = () => setListtk([{//set dinh dang list tai khoan
         idtaikhoan: idtaikhoan,
         idchucvu: idchucvu,
-        tentaikhoan: tentaikhoan,
-        matkhau: matkhau
+        username: tentaikhoan,
+        password: matkhau
     }])
 
     //Luu nhan vien
@@ -45,7 +45,6 @@ const FormQLTaiKhoan = (props) => {
         setListTaiKhoan()
         if (listtk === undefined) { }
         else {
-            console.log("Edit list>>>", listtk[0])
             let res = await axios.put('http://localhost:8000/api/tk/update', listtk[0])
             console.log(res.data.status)
             if (res.data.status === true) {

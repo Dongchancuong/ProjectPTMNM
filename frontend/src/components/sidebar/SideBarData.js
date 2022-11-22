@@ -11,13 +11,13 @@ import * as HiIcons from 'react-icons/hi';
 
 
 export const SideBarData = [
-    {
-        title: 'Dashboard',
-        path: '/dashboard',
-        icon: <AiIcons.AiFillDashboard/>,
-        color: '#cf2931',
-        isActive: true
-    },
+    // {
+    //     title: 'Dashboard',
+    //     path: '/dashboard',
+    //     icon: <AiIcons.AiFillDashboard/>,
+    //     color: '#cf2931',
+    //     isActive: true
+    // },
     {
         title: 'Chức vụ',
         path: '/qlchucvu',
