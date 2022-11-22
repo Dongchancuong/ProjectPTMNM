@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Check đăng nhập/đăng xuất cho từng tài khoản
+//Check đăng nhập/đăng xuất
 use App\Http\Controllers\AuthController;
 
 Route::post('login', [AuthController::class, 'login']);
