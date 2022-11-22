@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import FormQLNhanVien from '../form/FormQLNhanVien'
 import FormQLKhachHang from '../form/FormQLKhachHang';
 import FormQLTaiKhoan from '../form/FormQLTaiKhoan';
+import FormQLCTKM from '../form/FormQLCTKM';
 
 const ButtonDelete = ({ value, type }) => {
     const [show, setShow] = useState(false);
@@ -18,7 +19,8 @@ const ButtonDelete = ({ value, type }) => {
             {type === "qltaikhoan" ? <FormQLTaiKhoan value={value} type={"delete"} show={show} setshow={setShow} />
                 : type === "qlnhanvien" ? <FormQLNhanVien value={value} type={"delete"} show={show} setshow={setShow} />
                     : type === "qlkhachhang" ? <FormQLKhachHang value={value} type={"delete"} show={show} setshow={setShow} />
-                        : null}
+                        : type === "qlctkm" ? <FormQLCTKM value={value} type={"delete"} show={show} setshow={setShow} />
+                            : null}
         </>
     );
 }
