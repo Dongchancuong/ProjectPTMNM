@@ -6,7 +6,7 @@ const QLTaiKhoan = ({ title, type }) => {
     return (
         <div className='qltaikhoan'>
             <NavBarAdmin title={title} />
-            <Table type={type} />
+            <Table type={type}/>
         </div>
     );
 };

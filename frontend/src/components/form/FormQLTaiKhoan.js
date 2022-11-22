@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const FormQLTaiKhoan = (props) => {
@@ -27,9 +26,6 @@ const FormQLTaiKhoan = (props) => {
         tentaikhoan: tentaikhoan,
         matkhau: matkhau
     }])
-
-    console.log("Form QL TK>>>", props.value)
-    console.log("List TK TK>>>", listtk)
 
     //Luu nhan vien
     const saveCreateTK = async (e) => {
@@ -109,7 +105,7 @@ const FormQLTaiKhoan = (props) => {
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
-                            {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>ID Tài khoản</Form.Label>
                                 <Form.Control
                                     type="text"
@@ -118,7 +114,7 @@ const FormQLTaiKhoan = (props) => {
                                     defaultValue={idtaikhoan}
                                     readOnly
                                 />
-                            </Form.Group> */}
+                            </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>ID Chức vụ</Form.Label>
                                 <Form.Select aria-label="Default select example"

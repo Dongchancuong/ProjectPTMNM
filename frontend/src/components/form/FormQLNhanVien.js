@@ -6,9 +6,6 @@ import Moment from 'moment';//format tiền VNĐ
 import axios from 'axios';
 
 const FormQLNhanVien = (props) => {
-
-    console.log("ID tai khoan: ", props)
-
     const [idnhanvien, setIdnhanvien] = useState(props.type === "edit" || props.type === "view" ? props.value.idnhanvien : props.type === "create" ? props.lastid : null)
     const [idtaikhoan, setIdtaikhoan] = useState(props.type === "edit" || props.type === "view" ? props.value.idtaikhoan : null)
     const [hoten, setHoten] = useState(props.type === "edit" || props.type === "view" ? props.value.hoten : null)
@@ -50,10 +47,7 @@ const FormQLNhanVien = (props) => {
     //Luu nhan vien
     const saveCreateNV = async (e) => {
         e.preventDefault()
-
         setListNhanVien()
-
-        console.log(listnv[0])
         let res = await axios.post('http://localhost:8000/api/nv/add', listnv[0])
         if (res.data.status === true) {
             setIdtaikhoan(null)
@@ -72,14 +66,10 @@ const FormQLNhanVien = (props) => {
     const saveEditNV = async (e) => {
         e.preventDefault()
         setListNhanVien()
-        console.log(listnv)
         if (listnv === undefined) { }
         else {
-            console.log("Edit list>>>", listnv[0])
             let res = await axios.put('http://localhost:8000/api/nv/update', listnv[0])
-            console.log(res.data.status)
             if (res.data.status === true) {
-                // console.log(res.data.message)
                 setIdtaikhoan(null)
                 setHoten(null)
                 setEmail(null)
@@ -96,7 +86,6 @@ const FormQLNhanVien = (props) => {
 
     const saveDeleteNV = async (e) => {
         e.preventDefault()
-        console.log(props.value.idnhanvien)
         let res = await axios.delete(`http://localhost:8000/api/nv/delete/${props.value.idnhanvien}`)
         if (res.data.status === true) {
             handleClose()
@@ -106,47 +95,38 @@ const FormQLNhanVien = (props) => {
     const inputIdtaikhoan = (e) => {
         e.preventDefault()
         setIdtaikhoan(e.target.value)
-        console.log(idtaikhoan)
     }
     const inputHoten = (e) => {
         e.preventDefault()
         setHoten(e.target.value)
-        console.log(hoten)
     }
     const inputEmail = (e) => {
         e.preventDefault()
         setEmail(e.target.value)
-        console.log(email)
     }
     const inputGioitinh = (e) => {
         e.preventDefault()
         setGioitinh(e.target.value)
-        console.log(gioitinh)
     }
     const inputNgaysinh = (e) => {
         e.preventDefault()
         setNgaysinh(e.target.value)
-        console.log(ngaysinh)
     }
     const inputSdt = (e) => {
         e.preventDefault()
         setSdt(e.target.value)
-        console.log(sdt)
     }
     const inputDiachi = (e) => {
         e.preventDefault()
         setDiachi(e.target.value)
-        console.log(diachi)
     }
     const inputNgayvaolam = (e) => {
         e.preventDefault()
         setNgayvaolam(e.target.value)
-        console.log(ngayvaolam)
     }
     const inputLuong = (e) => {
         e.preventDefault()
         setLuong(e.target.value)
-        console.log(luong)
     }
 
 
@@ -189,17 +169,24 @@ const FormQLNhanVien = (props) => {
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>ID Tài Khoản</Form.Label>
-                                <Form.Select aria-label="Default select example"
-                                    name="idtaikhoan"
-                                    value={idtaikhoan}
-                                    onChange={inputIdtaikhoan}
-                                >
-                                    <option value="-1">Chọn ID Tài Khoản</option>
-                                    {props.idtaikhoan ? props.idtaikhoan.map((item, index) =>
-                                        <option key={index} value={item.idtaikhoan}>{item.idtaikhoan}</option>
-                                    ) : null}
+                                {props.type === "view"
+                                    ? <Form.Control
+                                        type="text"
+                                        defaultValue={idtaikhoan}
+                                        readOnly
+                                    />
+                                    : <Form.Select aria-label="Default select example"
+                                        name="idtaikhoan"
+                                        value={idtaikhoan}
+                                        onChange={inputIdtaikhoan}
+                                    >
+                                        <option value="-1">Chọn ID Tài Khoản</option>
+                                        {props.idtaikhoan ? props.idtaikhoan.map((item, index) =>
+                                            <option key={index} value={item.idtaikhoan}>{item.idtaikhoan}</option>
+                                        ) : null}
 
-                                </Form.Select>
+                                    </Form.Select>
+                                }
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Họ và tên</Form.Label>
