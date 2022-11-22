@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import FormQLNhanVien from '../form/FormQLNhanVien'
 import FormQLKhachHang from '../form/FormQLKhachHang';
+import FormQLTaiKhoan from '../form/FormQLTaiKhoan';
 
-const ButtonCreate = ({ type, lastid, idtaikhoan }) => {
+const ButtonCreate = ({ type, getnewid, idtaikhoan, idchucvu }) => {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
 
@@ -18,9 +19,10 @@ const ButtonCreate = ({ type, lastid, idtaikhoan }) => {
                                     : null}
             </Button>
 
-            {type === "qlnhanvien" ? <FormQLNhanVien type={"create"} show={show} setshow={setShow} lastid={lastid} idtaikhoan={idtaikhoan}/>
-                : type === "qlkhachhang" ? <FormQLKhachHang type={"create"} show={show} setshow={setShow} />
-                    : null}
+            {type === "qltaikhoan" ? <FormQLTaiKhoan type={"create"} show={show} setshow={setShow} idchucvu={idchucvu} />
+                : type === "qlnhanvien" ? <FormQLNhanVien type={"create"} show={show} setshow={setShow} lastid={getnewid} idtaikhoan={idtaikhoan} />
+                    : type === "qlkhachhang" ? <FormQLKhachHang type={"create"} show={show} setshow={setShow} />
+                        : null}
         </>
     );
 }

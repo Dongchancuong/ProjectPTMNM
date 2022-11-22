@@ -14,10 +14,14 @@ import ButtonChucVu from "../button/ButtonChucVu";
 
 class Table extends React.Component {
     state = {
+        listNV: [],
+        listKH: [],
+        listHD: [],
+        listTK: [],
+        listCV: this.props.listCV,
         list: [],
-        lastid: null,
-        listNV: this.props.listNV,
-        listTK: []
+        getnewid: null,
+        tknewaccount: null
     }
 
     tinhTrangFormatter = (cell, row, rowIndex, formatExtraData) => {// Hiển thị tình trạng ở object tình trạng
@@ -37,11 +41,20 @@ class Table extends React.Component {
             <>
                 {this.props.type === "qlchucvu" ? <ButtonChucVu></ButtonChucVu> : null}
                 {this.props.type === "qltaikhoan" || this.props.type === "qlchucvu" ? null : <ButtonView value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.listTK} />}
-                {this.props.type === "qlchucvu" ? null : <ButtonEdit value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.listTK} />}
+                {this.props.type === "qlchucvu" ? null : <ButtonEdit value={this.state.list[rowIndex]} type={this.props.type} idtaikhoan={this.state.listTK} idchucvu={this.state.listCV} />}
                 {this.props.type === "qlchucvu" ? null : <ButtonDelete value={row} type={this.props.type} />}
             </>
         )
     }
+
+    // handleEventButtonTaiKhoan = (cell, row, rowIndex) => {
+    //     return (
+    //         <>
+    //             <ButtonEdit value={row} type={this.props.type} idchucvu={this.state.listCV} />
+    //             <ButtonDelete value={row} type={this.props.type} />
+    //         </>
+    //     )
+    // }
 
     rowEvents = {
         onClick: (e, row, rowIndex) => {
@@ -253,27 +266,33 @@ class Table extends React.Component {
     }];
 
     async componentDidMount() {
-        let res = await axios.get(
-            this.props.type === "qlchucvu" ? "http://localhost:8000/api/cv/"
-                : this.props.type === "qltaikhoan" ? "http://localhost:8000/api/tk"
-                    : this.props.type === "qlnhanvien" ? "http://localhost:8000/api/nv/"
-                        : this.props.type === "qlkhachhang" ? "http://localhost:8000/api/kh/"
-                            : this.props.type === "qlhoadon" ? "http://localhost:8000/api/hd/"
-                                : null
-        );
-
+        // let res = await axios.get(
+        //     this.props.type === "qlchucvu" ? "http://localhost:8000/api/cv/"
+        //         : this.props.type === "qltaikhoan" ? "http://localhost:8000/api/tk"
+        //             : this.props.type === "qlnhanvien" ? "http://localhost:8000/api/nv/"
+        //                 : this.props.type === "qlkhachhang" ? "http://localhost:8000/api/kh/"
+        //                     : this.props.type === "qlhoadon" ? "http://localhost:8000/api/hd/"
+        //                         : null
+        // );
+        // if (this.state.listNV || this.state.listKH || this.state.listHD || this.state.listTK || this.state.listCV) {
+            // let resNV = await axios.get("http://localhost:8000/api/cv/")
+            // let resKH = await axios.get("http://localhost:8000/api/kh/")
+            // let resCV = await axios.get("http://localhost:8000/api/cv")
+            // let resHD = await axios.get("http://localhost:8000/api/hd")
+            // let resTK = await axios.get("http://localhost:8000/api/tk")
+            // this.setState({
+            //     listNV: resNV && resNV.data && resNV.data.data ? resNV.data.data : [],
+            //     listKH: resKH && resKH.data && resKH.data.data ? resKH.data.data : [],
+            //     listCV: resCV && resCV.data && resCV.data.data ? resCV.data.data : [],
+            //     listHD: resHD && resHD.data && resHD.data.data ? resHD.data.data : [],
+            //     listTK: resTK && resTK.data && resTK.data.data ? resTK.data.data : []
+            // })
+        // }
+        let resgetnewid = await axios.get("http://localhost:8000/api/nv/getnewid")
+        let resNewAccount = await axios.get("http://localhost:8000/api/tk/newaccount")
         this.setState({
-            list: res && res.data && res.data.data ? res.data.data : []
-        })
-
-        let res2 = await axios.get("http://localhost:8000/api/nv/getnewid")
-        this.setState({
-            lastid: res2.data.data
-        })
-
-        let res3 = await axios.get("http://localhost:8000/api/tk")
-        this.setState({
-            listTK: res3 && res3.data && res3.data.data ? res3.data.data : []
+            tknewaccount: resNewAccount && resNewAccount.data && resNewAccount.data.data ? resNewAccount.data.data : [],
+            getnewid: resgetnewid.data.data
         })
     }
 
@@ -282,12 +301,18 @@ class Table extends React.Component {
     render() {
         return (
             <div className="bg-white">
-                {this.props.type === "qlkhachhang" ? null : <ButtonCreate type={this.props.type} lastid={this.state.lastid} idtaikhoan={this.state.listTK} />}
+                {this.props.type === "qlkhachhang" ? null : <ButtonCreate type={this.props.type} getnewid={this.state.getnewid} idtaikhoan={this.state.listTK} idchucvu={this.state.listCV} />}
                 <BootstrapTable
                     striped
                     hover
                     keyField="id"
-                    data={this.state.list}//dữ liệu
+                    // data={this.state.list}//dữ liệu
+                    data={this.props.type === "qlnhanvien" ? this.state.listNV
+                        : this.props.type === "qltaikhoan" ? this.state.listTK
+                            : this.props.type === "qlchucvu" ? this.state.listCV
+                                : this.props.type === "qlkhachhang" ? this.state.listKH
+                                    : this.props.type === "qlhoadon" ? this.state.listHD
+                                        : null}//tiêu đề
                     columns={this.props.type === "qlnhanvien" ? this.columnNV
                         : this.props.type === "qltaikhoan" ? this.columnTK
                             : this.props.type === "qlchucvu" ? this.columnCV

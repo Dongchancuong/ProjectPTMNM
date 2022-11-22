@@ -37,13 +37,14 @@ Route::get('tk', [AccountController::class, 'index']);
 Route::post('tk/add', [AccountController::class, 'store'])->name("newAccount");
 Route::delete('tk/update', [AccountController::class, 'store']);
 Route::delete('tk/delete/{idtaikhoan}', [AccountController::class, 'destroy']);
+Route::get('tk/newaccount', [AccountController::class, 'newAccount']);
 
 //Quản lý nhân viên
 use App\Http\Controllers\EmployeeController;
 Route::get('nv', [EmployeeController::class, 'index']);
 Route::post('nv/add', [EmployeeController::class, 'store']);
 Route::put('nv/update', [EmployeeController::class, 'update']);
-Route::get('nv/lastid', [EmployeeController::class, 'lastid']);
+Route::get('nv/getnewid', [EmployeeController::class, 'getnewid']);
 Route::delete('nv/delete/{idnhanvien}', [EmployeeController::class, 'destroy']);
 
 //Quản lý khách hàng

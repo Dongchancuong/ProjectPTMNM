@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const FormQLNhanVien = (props) => {
 
-    console.log("ID tai khoan: ", props.idtaikhoan)
+    console.log("ID tai khoan: ", props)
 
     const [idnhanvien, setIdnhanvien] = useState(props.type === "edit" || props.type === "view" ? props.value.idnhanvien : props.type === "create" ? props.lastid : null)
     const [idtaikhoan, setIdtaikhoan] = useState(props.type === "edit" || props.type === "view" ? props.value.idtaikhoan : null)
@@ -20,7 +20,18 @@ const FormQLNhanVien = (props) => {
     const [ngayvaolam, setNgayvaolam] = useState(props.type === "edit" || props.type === "view" ? props.value.ngayvaolam : null)
     const [luong, setLuong] = useState(props.type === "edit" ? props.value.luong : props.type === "view" ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(props.value.luong) : null)
 
-    const [listnv, setListnv] = useState()
+    const [listnv, setListnv] = useState([{
+        idnhanvien: props.type === "create" ? props.lastid : idnhanvien,
+        idtaikhoan: idtaikhoan,
+        hoten: hoten,
+        email: email,
+        gioitinh: gioitinh,
+        ngaysinh: ngaysinh,
+        sdt: sdt,
+        diachi: diachi,
+        ngayvaolam: ngayvaolam,
+        luong: luong
+    }])
 
     const handleClose = () => props.setshow(false)
 
@@ -86,7 +97,7 @@ const FormQLNhanVien = (props) => {
     const saveDeleteNV = async (e) => {
         e.preventDefault()
         console.log(props.value.idnhanvien)
-        let res = await axios.delete('http://localhost:8000/api/nv/delete', props.value.idnhanvien)
+        let res = await axios.delete(`http://localhost:8000/api/nv/delete/${props.value.idnhanvien}`)
         if (res.data.status === true) {
             handleClose()
         }
@@ -172,7 +183,7 @@ const FormQLNhanVien = (props) => {
                                     type="text"
                                     name="idnhanvien"
                                     placeholder="Nhập ID nhân viên"
-                                    defaultValue={idnhanvien}
+                                    defaultValue={props.type === "create" ? props.lastid : idnhanvien}
                                     readOnly
                                 />
                             </Form.Group>

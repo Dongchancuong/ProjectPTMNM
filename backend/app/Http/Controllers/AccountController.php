@@ -26,8 +26,8 @@ class AccountController extends Controller
 
     public function newAccount()
     {
-        $empAcc = Employee::pluck('idtaikhoan')->all();
-        $cusAcc = Customer::pluck('idtaikhoan')->all();
+        $empAcc = Employee::select('idtaikhoan')->whereNotNull('idtaikhoan')->get();
+        $cusAcc = Customer::select('idtaikhoan')->whereNotNull('idtaikhoan')->get();
         $accounts = Account::whereNotIn('idtaikhoan', $empAcc)->whereNotIn('idtaikhoan', $cusAcc)->get();
         $arr = [
         'status' => true,
